@@ -29,14 +29,22 @@ export default function AdditionalImagesUpload() {
             emptyFileView={<EmptyAdditionalImageView />}
           />
         )}
-        {files.map((file) => (
+        {files.map((file, index) => (
           <ImageUploadCard
-            key={file.name}
+            key={`${file.name}-${index}`}
             file={file}
             size="small"
-            setFile={(newFile) =>
-              setFiles((prev) => [...prev, newFile ?? file])
-            }
+            setFile={(newFile) => {
+              if (newFile) {
+                setFiles((prev) => {
+                  const updated = [...prev];
+                  updated[index] = newFile;
+                  return updated;
+                });
+              } else {
+                setFiles((prev) => prev.filter((_, i) => i !== index));
+              }
+            }}
           />
         ))}
       </div>
