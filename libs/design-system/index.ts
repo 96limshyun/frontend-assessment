@@ -5,3 +5,4 @@ export { default as ImageUploadCard } from "./ImageUploadCard";
 export { default as EmptyImageUploadView } from "./EmptyImageUploadView";
 export { default as EmptyAdditionalImageView } from "./EmptyAdditionalImageView";
 export { TextArea } from "./TextArea";
+export { default as ToggleButton } from "./ToggleButton";
