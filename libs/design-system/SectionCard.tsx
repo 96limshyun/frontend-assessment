@@ -1,9 +1,9 @@
-import { type PropsWithChildren } from "react";
+import { type PropsWithChildren, type ReactNode } from "react";
 
 import { twc } from "@/libs/utils";
 
 interface SectionCardProps {
-  title: string;
+  title: ReactNode;
   subtitle?: string;
   className?: string;
 }
