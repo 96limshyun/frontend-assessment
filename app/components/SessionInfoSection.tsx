@@ -11,7 +11,6 @@ import {
   ACTIVITY_CONTENT_MAX_LENGTH,
 } from "@/app/constants";
 import { useSessionInfo } from "@/app/hooks/useSessionInfo";
-import { useState } from "react";
 
 export default function SessionInfoSection() {
   const {
@@ -25,9 +24,11 @@ export default function SessionInfoSection() {
     handleEndTimeBlur,
     handleActivityContentChange,
     handleAddSession,
+    handleSessionDateChange,
+    handleCompleteSessionDate,
+    openedCalendarId,
+    setOpenedCalendarId,
   } = useSessionInfo();
-
-  const [openedCalendarId, setOpenedCalendarId] = useState<string | null>(null);
 
   return (
     <>
@@ -57,7 +58,7 @@ export default function SessionInfoSection() {
                       <DatePickerButton
                         type="button"
                         onClick={() => {
-                          setOpenedCalendarId((prev) =>
+                          setOpenedCalendarId((prev: string | null) =>
                             prev === session.sessionId
                               ? null
                               : session.sessionId
@@ -74,7 +75,14 @@ export default function SessionInfoSection() {
                             event.stopPropagation();
                           }}
                         >
-                          <Calendar />
+                          <Calendar
+
+                            selectedDate={session.sessionDate ?? new Date()}
+                            onDateChange={(date: Date) =>
+                              handleSessionDateChange(session.sessionId, date)
+                            }
+                            onComplete={handleCompleteSessionDate}
+                          />
                         </div>
                       )}
                     </DatePickerWrapper>

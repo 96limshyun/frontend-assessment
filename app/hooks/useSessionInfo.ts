@@ -44,12 +44,30 @@ interface UseSessionInfoReturn {
   ) => void;
   handleActivityContentChange: (sessionId: string, value: string) => void;
   handleAddSession: () => void;
+  handleSessionDateChange: (sessionId: string, date: Date) => void;
+  handleCompleteSessionDate: () => void;
+  openedCalendarId: string | null;
+  setOpenedCalendarId: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 export const useSessionInfo = (): UseSessionInfoReturn => {
   const [sessionInfo, setSessionInfo] = useState<SessionInfo[]>([
     createDefaultSessionInfo(),
   ]);
+
+  const [openedCalendarId, setOpenedCalendarId] = useState<string | null>(null);
+
+  const handleSessionDateChange = (sessionId: string, date: Date) => {
+    setSessionInfo((prev) =>
+      prev.map((item) =>
+        item.sessionId === sessionId ? { ...item, sessionDate: date } : item
+      )
+    );
+  };
+
+  const handleCompleteSessionDate = () => {
+    setOpenedCalendarId(null);
+  };
 
   const updateSessionEndTime = (sessionId: string, endTime: TimeInfo) => {
     setSessionInfo((prev) =>
@@ -244,5 +262,9 @@ export const useSessionInfo = (): UseSessionInfoReturn => {
     handleEndTimeBlur,
     handleActivityContentChange,
     handleAddSession,
+    handleSessionDateChange,
+    handleCompleteSessionDate,
+    openedCalendarId,
+    setOpenedCalendarId,
   };
 };

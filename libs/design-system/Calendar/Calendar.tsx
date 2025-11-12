@@ -30,11 +30,16 @@ const generateCalendarMatrix = (year: number, month: number) => {
   return weeks;
 };
 
-export default function Calendar() {
+interface CalendarProps {
+  selectedDate: Date;
+  onDateChange: (date: Date) => void;
+  onComplete: () => void;
+}
+
+export default function Calendar({ selectedDate, onDateChange, onComplete }: CalendarProps) {
   const today = useMemo(() => new Date(), []);
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [currentMonth, setCurrentMonth] = useState(today.getMonth());
-  const [selectedDate, setSelectedDate] = useState<Date>(today);
 
   const weeks = useMemo(
     () => generateCalendarMatrix(currentYear, currentMonth),
@@ -110,7 +115,7 @@ export default function Calendar() {
                       type="button"
                       isToday={isToday}
                       isSelected={isSelected}
-                      onClick={() => setSelectedDate(date)}
+                      onClick={() => onDateChange(date)}
                     >
                       {date.getDate()}
                     </DateButton>
@@ -121,7 +126,7 @@ export default function Calendar() {
           ))}
         </tbody>
       </CalendarTable>
-      <CompleteButton type="button" onClick={() => {}}>
+      <CompleteButton type="button" onClick={onComplete}>
         선택 완료
       </CompleteButton>
     </CalendarContainer>
@@ -173,21 +178,21 @@ const EmptyCell = twc.td`
 
 const DateButtonBase = twc.button`
   w-[44px] h-[44px] rounded-[8px] flex items-center justify-center
-  text-[18px] font-medium transition-colors border border-transparent text-[#121212]
-  cursor-pointer hover:bg-[#F5F5F5] focus:outline-none focus:ring-2 focus:ring-[#121212]/20
+  text-[18px] font-medium border border-transparent text-[#121212]
+  cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#121212]/20
 `;
 
 interface DateButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   isToday: boolean;
-  isSelected: boolean;
   children: ReactNode;
+  isSelected: boolean;
 }
 
 function DateButton({
   isToday,
-  isSelected,
   className,
   children,
+  isSelected,
   ...props
 }: DateButtonProps) {
   const states = [
