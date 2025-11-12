@@ -45,10 +45,14 @@ export default function SessionInfoSection() {
               </SessionHeader>
               <SessionContent>
                 <div className="flex flex-col gap-[12px] md:gap-[16px] w-full">
-                  <div>
-                    <span>날짜 선택</span>
-                    <span>{session.sessionDate.toLocaleDateString()}</span>
-                  </div>
+                  <DatePickerField>
+                    <DatePickerLabel>날짜 선택</DatePickerLabel>
+                    <DatePickerButton type="button">
+                      {session.sessionDate
+                        ? session.sessionDate.toLocaleDateString()
+                        : "날짜를 선택해주세요"}
+                    </DatePickerButton>
+                  </DatePickerField>
                   <TimeRangeForm.Field>
                     <TimeRangeForm.Label>시작 시간</TimeRangeForm.Label>
                     <TimeRangeForm.TimeGroup>
@@ -209,7 +213,7 @@ export default function SessionInfoSection() {
   );
 }
 
-const SessionInfoContainer = twc.div`md:w-[510px] md:h-[555px] w-[328px] h-[487px] rounded-[8px] bg-[#F7F7F8] px-[20px] py-[28px] gap-[32px] flex flex-col`;
+const SessionInfoContainer = twc.div`md:w-[510px] h-[555px] w-[328px] rounded-[8px] bg-[#F7F7F8] px-[20px] py-[28px] gap-[32px] flex flex-col`;
 
 const SessionHeader = twc.div`flex items-center justify-between w-full`;
 
@@ -233,4 +237,13 @@ const AddSessionButton = twc.button`
   leading-[130%] tracking-[-0.02em]
   cursor-pointer hover:bg-[#2a2a2a] transition-colors
   mt-[24px]
+`;
+
+const DatePickerField = twc.div`flex items-center justify-around w-full gap-[24px]`;
+
+const DatePickerLabel = twc.label`text-[18px] leading-[130%] tracking-[-0.02em] text-[#121212]`;
+
+const DatePickerButton = twc.button`
+  flex flex-1 justify-around items-center h-[60px] text-[20px]
+  rounded-[8px] border border-[#E5E5E5] bg-white py-[8px]
 `;

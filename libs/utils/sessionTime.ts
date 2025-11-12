@@ -49,7 +49,7 @@ export const addOneHour = (time: TimeInfo): TimeInfo => {
 export const createDefaultSessionInfo = (): SessionInfo => ({
   sessionId: uuidv4(),
   sessionName: "",
-  sessionDate: new Date(),
+  sessionDate: null,
   sessionTimeStart: {
     period: "오전",
     hour: "10",
