@@ -1,25 +1,83 @@
 "use client";
 
-import { SectionCard } from "@/libs/design-system";
+import {
+  SectionCard,
+  BottomSheet,
+  SelectTrigger,
+  OptionButton,
+} from "@/libs/design-system";
+import { splitTextIntoParagraphs, showToast } from "@/libs/utils";
 
-export default function CategorySection() {
+interface CategorySectionProps {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  selectedCategories: string[];
+  setSelectedCategories: (categories: string[]) => void;
+}
+
+const CATEGORIES = [
+  "용돈 벌기",
+  "디지털",
+  "그림",
+  "글쓰기/독서",
+  "건강/운동",
+  "동기부여/성장",
+  "취미힐링",
+  "외국어",
+];
+
+export default function CategorySection({ open, setOpen, selectedCategories, setSelectedCategories }: CategorySectionProps) {
+
+  const handleCategoryClick = (category: string) => {
+    if (selectedCategories.includes(category)) {
+      setSelectedCategories(selectedCategories.filter((c) => c !== category));
+    } else {
+      if (selectedCategories.length < 2) {
+        setSelectedCategories([...selectedCategories, category]);
+      } else {
+        showToast("최대 2개까지 선택 가능해요");
+      }
+    }
+  };
+
   return (
     <SectionCard title="카테고리">
-      <div className="flex h-[60px] items-center justify-between rounded-[8px] border border-[#E5E5E5] bg-white px-5">
-        <span className="text-base text-[#8F8F8F]">주제를 선택해주세요</span>
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M8.46967 3.46967C8.76256 3.17678 9.23732 3.17678 9.53022 3.46967L17.5302 11.4697C17.8231 11.7626 17.8231 12.2373 17.5302 12.5302L9.53022 20.5302C9.23732 20.8231 8.76256 20.8231 8.46967 20.5302C8.17678 20.2373 8.17678 19.7626 8.46967 19.4697L15.9394 11.9999L8.46967 4.53022C8.17678 4.23732 8.17678 3.76256 8.46967 3.46967Z"
-            fill="#121212"
+      <BottomSheet.Root open={open} onOpenChange={setOpen}>
+        <BottomSheet.Trigger asChild>
+          <SelectTrigger
+            placeholder="주제를 선택해주세요"
+            value={
+              selectedCategories.length > 0
+                ? selectedCategories.join(", ")
+                : undefined
+            }
           />
-        </svg>
-      </div>
+        </BottomSheet.Trigger>
+
+        <BottomSheet.Content>
+          <div className="w-full px-4 mx-auto md:max-w-[1100px] md:px-0">
+            <SectionCard
+              title={splitTextIntoParagraphs(
+                "어떤 카테고리의\n콘텐츠를 만드시나요?",
+                "\n"
+              )}
+              subtitle="최대 2개까지 선택 가능합니다."
+            >
+              <div className="grid grid-cols-2 gap-3">
+                {CATEGORIES.map((category) => (
+                  <OptionButton
+                    key={category}
+                    selected={selectedCategories.includes(category)}
+                    onClick={() => handleCategoryClick(category)}
+                  >
+                    {category}
+                  </OptionButton>
+                ))}
+              </div>
+            </SectionCard>
+          </div>
+        </BottomSheet.Content>
+      </BottomSheet.Root>
     </SectionCard>
   );
 }
