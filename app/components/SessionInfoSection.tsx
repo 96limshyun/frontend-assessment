@@ -6,6 +6,16 @@ import { TextArea } from "@/libs/design-system";
 const MIN_LENGTH = 8;
 const MAX_LENGTH = 800;
 
+interface SessionInfo {
+  sessionId: string;
+  sessionName: string;
+  sessionDate: Date;
+  sessionTime: string;
+  sessionLocation: string;
+  sessionLocationDetail: string;
+  activityContent: string;
+}
+
 export default function SessionInfoSection() {
   const [sessionInfo, setSessionInfo] = useState({
     sessionId: "",
