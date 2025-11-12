@@ -8,17 +8,25 @@ import {
   ContentTitleSection,
   ActivityTypeSection,
 } from "@/app/components";
+import { useState } from "react";
 
 export default function Home() {
+  const [open, setOpen] = useState(false);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   return (
     <>
-      <Header />
+      <Header selectedCategories={selectedCategories} setOpen={setOpen} />
       <SectionLayout
         leftTop={<MainImageUpload />}
         leftBottom={<AdditionalImagesUpload />}
         right={
           <div className="flex flex-col">
-            <CategorySection />
+            <CategorySection
+              open={open}
+              setOpen={setOpen}
+              selectedCategories={selectedCategories}
+              setSelectedCategories={setSelectedCategories}
+            />
             <ContentTitleSection />
             <ActivityTypeSection />
           </div>
