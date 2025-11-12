@@ -44,7 +44,10 @@ export default function AdditionalImagesUpload() {
           </div>
         )}
         {files.map((file, index) => (
-          <div key={`${file.name}-${index}`} className="shrink-0 w-[160px] md:w-auto">
+          <div
+            key={`${file.name}-${index}`}
+            className="shrink-0 w-[160px] md:w-auto"
+          >
             <ImageUploadCard
               file={file}
               size="small"
