@@ -50,9 +50,7 @@ interface BottomSheetOverlayProps {
 }
 
 function BottomSheetOverlay({ className }: BottomSheetOverlayProps) {
-  return (
-    <Drawer.Overlay className={twc("fixed inset-0", className)} />
-  );
+  return <Drawer.Overlay className={twc("fixed inset-0", className)} />;
 }
 
 interface BottomSheetHeaderProps {
@@ -67,28 +65,32 @@ function BottomSheetHeader({
   className,
 }: BottomSheetHeaderProps) {
   return (
-    <div
-      className={twc(
-        "flex items-center justify-between border-b border-[#E5E5E5] px-4 py-4",
-        className
-      )}
-    >
-      <button
-        onClick={onClose}
-        className="flex h-10 w-10 items-center justify-center hover:bg-gray-100 rounded-full transition-colors"
-        aria-label="닫기"
+    <>
+      <Drawer.Title className="sr-only">{title || "다이얼로그"}</Drawer.Title>
+      <Drawer.Description className="sr-only">
+        {title || "다이얼로그 내용"}
+      </Drawer.Description>
+      <div
+        className={twc(
+          "relative flex items-center justify-between border-b border-[#E5E5E5] px-4 py-4 md:hidden",
+          className
+        )}
       >
-        <Image src="/close.svg" alt="닫기" width={24} height={24} />
-      </button>
-      {title ? (
-        <Drawer.Title className="absolute left-1/2 -translate-x-1/2 text-lg font-semibold text-[#121212]">
-          {title}
-        </Drawer.Title>
-      ) : (
-        <Drawer.Title className="sr-only">다이얼로그</Drawer.Title>
-      )}
-      <div className="w-10" />
-    </div>
+        <button
+          onClick={onClose}
+          className="flex h-10 w-10 items-center justify-center hover:bg-gray-100 rounded-full transition-colors"
+          aria-label="닫기"
+        >
+          <Image src="/close.svg" alt="닫기" width={24} height={24} />
+        </button>
+        {title && (
+          <span className="absolute left-1/2 -translate-x-1/2 text-lg font-semibold text-[#121212]">
+            {title}
+          </span>
+        )}
+        <div className="w-10" />
+      </div>
+    </>
   );
 }
 
@@ -106,7 +108,7 @@ function BottomSheetContent({
       <Drawer.Content
         className={twc(
           "fixed bottom-0 left-0 right-0 mt-24 flex flex-col rounded-t-[16px] bg-white",
-          "h-[90vh]",
+          "h-screen md:h-[90vh]",
           className
         )}
       >

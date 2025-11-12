@@ -26,8 +26,12 @@ const CATEGORIES = [
   "외국어",
 ];
 
-export default function CategorySection({ open, setOpen, selectedCategories, setSelectedCategories }: CategorySectionProps) {
-
+export default function CategorySection({
+  open,
+  setOpen,
+  selectedCategories,
+  setSelectedCategories,
+}: CategorySectionProps) {
   const handleCategoryClick = (category: string) => {
     if (selectedCategories.includes(category)) {
       setSelectedCategories(selectedCategories.filter((c) => c !== category));
@@ -55,6 +59,10 @@ export default function CategorySection({ open, setOpen, selectedCategories, set
         </BottomSheet.Trigger>
 
         <BottomSheet.Content>
+          <BottomSheet.Header
+            title="카테고리 선택"
+            onClose={() => setOpen(false)}
+          />
           <div className="w-full px-4 mx-auto md:max-w-[1100px] md:px-0">
             <SectionCard
               title={splitTextIntoParagraphs(
