@@ -1,6 +1,6 @@
 import { type PropsWithChildren, type ReactNode } from "react";
 
-import { twc } from "@/libs/utils";
+import { twx } from "@/libs/utils";
 
 interface SectionCardProps {
   title: ReactNode;
@@ -15,13 +15,21 @@ export default function SectionCard({
   children,
 }: PropsWithChildren<SectionCardProps>) {
   return (
-    <section className={twc("flex w-full flex-col gap-6 pt-[40px]", className)}>
+    <section className={twx("flex w-full flex-col gap-6 pt-[40px]", className)}>
       <header className="flex flex-col gap-2">
-        <h2 className=" text-[28px] font-bold leading-[130%] tracking-[-0.02em] text-[#121212]">
+        <h2
+          className={twx(
+            "font-bold text-[22px] md:text-[28px] leading-[130%] tracking-[-0.02em] text-[#121212]"
+          )}
+        >
           {title}
         </h2>
         {subtitle ? (
-          <p className=" text-[20px] font-medium leading-[130%] tracking-[-0.02em] text-[#565656]">
+          <p
+            className={twx(
+              "text-[18px] md:text-[20px] font-medium leading-[130%] tracking-[-0.02em] text-[#565656]"
+            )}
+          >
             {subtitle}
           </p>
         ) : null}
