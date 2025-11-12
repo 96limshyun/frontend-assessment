@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 
 import EmptyImageUploadView from "./EmptyImageUploadView";
 
@@ -10,55 +10,75 @@ const MAX_FILE_SIZE = 15 * 1024 * 1024;
 interface ImageUploadCardProps {
   file: File | null;
   setFile: (file: File | null) => void;
+  setFiles?: (files: File[]) => void;
   emptyFileView?: React.ReactNode;
   size?: "large" | "small";
+  multiple?: boolean;
+  maxFiles?: number;
 }
 
 export default function ImageUploadCard({
   file,
   setFile,
+  setFiles,
   emptyFileView,
   size = "large",
+  multiple = false,
+  maxFiles = 4,
 }: ImageUploadCardProps) {
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!file) {
+      return;
+    }
+
+    const url = URL.createObjectURL(file);
+    // Blob URL은 외부 리소스이므로 effect에서 state 업데이트가 필요
+    // eslint-disable-next-line
+    setPreviewUrl(url);
+
+    return () => {
+      URL.revokeObjectURL(url);
+      setPreviewUrl(null);
+    };
+  }, [file]);
 
   const openFileDialog = () => inputRef.current?.click();
 
-  const clearPreview = () => {
-    if (previewUrl) {
-      URL.revokeObjectURL(previewUrl);
-    }
-    setPreviewUrl(null);
-  };
-
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const [selected] = event.target.files ?? [];
+    const selectedFiles = Array.from(event.target.files ?? []);
     event.target.value = "";
 
-    if (!selected) {
+    if (selectedFiles.length === 0) {
       return;
     }
 
-    if (!ACCEPTED_MIME_TYPES.includes(selected.type)) {
-      setFile(null);
-      clearPreview();
-      return;
-    }
+    if (multiple && setFiles) {
+      const validFiles = selectedFiles
+        .filter((file) => ACCEPTED_MIME_TYPES.includes(file.type))
+        .filter((file) => file.size <= MAX_FILE_SIZE)
+        .slice(0, maxFiles);
 
-    if (selected.size > MAX_FILE_SIZE) {
-      setFile(null);
-      clearPreview();
-      return;
-    }
-
-    setFile(selected);
-    setPreviewUrl((previous) => {
-      if (previous) {
-        URL.revokeObjectURL(previous);
+      if (validFiles.length > 0) {
+        setFiles(validFiles);
       }
-      return URL.createObjectURL(selected);
-    });
+    } else {
+      const [selected] = selectedFiles;
+
+      if (!ACCEPTED_MIME_TYPES.includes(selected.type)) {
+        setFile(null);
+        return;
+      }
+
+      if (selected.size > MAX_FILE_SIZE) {
+        setFile(null);
+        return;
+      }
+
+      setFile(selected);
+    }
   };
 
   const handleUploadButtonClick = () => {
@@ -74,11 +94,12 @@ export default function ImageUploadCard({
       tabIndex={0}
       onClick={handleUploadButtonClick}
     >
-      {file ? (
+      {file && previewUrl ? (
+        // eslint-disable-next-line @next/next/no-img-element
         <img
-          src={URL.createObjectURL(file)}
+          src={previewUrl}
           alt="image"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover rounded-[16px]"
         />
       ) : emptyFileView ? (
         emptyFileView
@@ -91,6 +112,7 @@ export default function ImageUploadCard({
         accept=".jpg, .png"
         onChange={handleFileChange}
         className="hidden"
+        multiple={multiple}
       />
     </div>
   );

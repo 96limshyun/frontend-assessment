@@ -13,6 +13,15 @@ const MAX_FILES = 4;
 export default function AdditionalImagesUpload() {
   const [files, setFiles] = useState<File[]>([]);
 
+  const handleMultipleFiles = (newFiles: File[]) => {
+    setFiles((prev) => {
+      const combined = [...prev, ...newFiles];
+      return combined.slice(0, MAX_FILES);
+    });
+  };
+
+  const remainingSlots = MAX_FILES - files.length;
+
   return (
     <SectionCard
       title="추가 이미지 (선택)"
@@ -26,7 +35,10 @@ export default function AdditionalImagesUpload() {
             setFile={(newFile) => {
               if (newFile) setFiles((prev) => [...prev, newFile]);
             }}
+            setFiles={handleMultipleFiles}
             emptyFileView={<EmptyAdditionalImageView />}
+            multiple={true}
+            maxFiles={remainingSlots}
           />
         )}
         {files.map((file, index) => (
