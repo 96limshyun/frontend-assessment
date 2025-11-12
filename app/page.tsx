@@ -7,6 +7,7 @@ import {
   CategorySection,
   ContentTitleSection,
   ActivityTypeSection,
+  SessionInfoSection,
 } from "@/app/components";
 import { useState } from "react";
 
@@ -41,6 +42,7 @@ export default function Home() {
             />
             <ContentTitleSection />
             <ActivityTypeSection />
+            <SessionInfoSection />
           </div>
         }
       />
