@@ -1,13 +1,17 @@
-import { SectionCard } from "@/libs/design-system";
+import {
+  SectionCard,
+  Calendar,
+  TextArea,
+  TimeRangeForm,
+} from "@/libs/design-system";
 import { twc } from "react-twc";
-import { TextArea } from "@/libs/design-system";
 import Image from "next/image";
-import { TimeRangeForm } from "@/libs/design-system";
 import {
   ACTIVITY_CONTENT_MIN_LENGTH,
   ACTIVITY_CONTENT_MAX_LENGTH,
 } from "@/app/constants";
 import { useSessionInfo } from "@/app/hooks/useSessionInfo";
+import { useState } from "react";
 
 export default function SessionInfoSection() {
   const {
@@ -22,6 +26,8 @@ export default function SessionInfoSection() {
     handleActivityContentChange,
     handleAddSession,
   } = useSessionInfo();
+
+  const [openedCalendarId, setOpenedCalendarId] = useState<string | null>(null);
 
   return (
     <>
@@ -47,11 +53,31 @@ export default function SessionInfoSection() {
                 <div className="flex flex-col gap-[12px] md:gap-[16px] w-full">
                   <DatePickerField>
                     <DatePickerLabel>날짜 선택</DatePickerLabel>
-                    <DatePickerButton type="button">
-                      {session.sessionDate
-                        ? session.sessionDate.toLocaleDateString()
-                        : "날짜를 선택해주세요"}
-                    </DatePickerButton>
+                    <DatePickerWrapper>
+                      <DatePickerButton
+                        type="button"
+                        onClick={() => {
+                          setOpenedCalendarId((prev) =>
+                            prev === session.sessionId
+                              ? null
+                              : session.sessionId
+                          );
+                        }}
+                      >
+                        {session.sessionDate
+                          ? session.sessionDate.toLocaleDateString()
+                          : "날짜를 선택해주세요"}
+                      </DatePickerButton>
+                      {openedCalendarId === session.sessionId && (
+                        <CalendarPopover
+                          onClick={(event) => {
+                            event.stopPropagation();
+                          }}
+                        >
+                          <Calendar />
+                        </CalendarPopover>
+                      )}
+                    </DatePickerWrapper>
                   </DatePickerField>
                   <TimeRangeForm.Field>
                     <TimeRangeForm.Label>시작 시간</TimeRangeForm.Label>
@@ -244,6 +270,14 @@ const DatePickerField = twc.div`flex items-center justify-around w-full gap-[24p
 const DatePickerLabel = twc.label`text-[18px] leading-[130%] tracking-[-0.02em] text-[#121212]`;
 
 const DatePickerButton = twc.button`
-  flex flex-1 justify-around items-center h-[60px] text-[20px]
+  w-full flex flex-1 justify-around items-center h-[60px] text-[20px]
   rounded-[8px] border border-[#E5E5E5] bg-white py-[8px]
+`;
+
+const DatePickerWrapper = twc.div`relative flex-1`;
+
+const CalendarPopover = twc.div`
+  absolute left-0 top-[calc(100%+8px)] w-full z-10
+  border border-[#E5E5E5] bg-white rounded-[12px] p-[12px]
+  shadow-[0px_12px_32px_rgba(0,0,0,0.08)]
 `;
