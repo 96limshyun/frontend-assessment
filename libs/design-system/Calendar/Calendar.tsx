@@ -10,23 +10,18 @@ const WEEK_DAYS = ["일", "월", "화", "수", "목", "금", "토"];
 
 const generateCalendarMatrix = (year: number, month: number) => {
   const firstDayOfMonth = new Date(year, month, 1).getDay();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-  const weeks: Array<Array<Date | null>> = [];
-  let currentDay = 1;
+  const weeks: Array<Array<Date>> = [];
+  let dayPointer = 1 - firstDayOfMonth;
 
   for (let week = 0; week < 6; week += 1) {
-    const weekDays: Array<Date | null> = [];
+    const weekDays: Array<Date> = [];
 
     for (let dayIndex = 0; dayIndex < 7; dayIndex += 1) {
-      if (week === 0 && dayIndex < firstDayOfMonth) {
-        weekDays.push(null);
-      } else if (currentDay > daysInMonth) {
-        weekDays.push(null);
-      } else {
-        weekDays.push(new Date(year, month, currentDay));
-        currentDay += 1;
-      }
+      const date = new Date(year, month, dayPointer);
+      date.setHours(0, 0, 0, 0);
+      weekDays.push(date);
+      dayPointer += 1;
     }
 
     weeks.push(weekDays);
@@ -74,19 +69,21 @@ export default function Calendar() {
   return (
     <CalendarContainer>
       <Header>
-        <NavButton
-          type="button"
-          onClick={goToPreviousMonth}
-          aria-label="이전 달"
-        >
-          <NavIcon src="/chevron-left.svg" alt="이전 달" />
-        </NavButton>
         <Title>
           {currentYear}년 {currentMonth + 1}월
         </Title>
-        <NavButton type="button" onClick={goToNextMonth} aria-label="다음 달">
-          <NavIcon src="/chevron-right.svg" alt="다음 달" />
-        </NavButton>
+        <div className="flex items-center gap-[8px]">
+          <NavButton
+            type="button"
+            onClick={goToPreviousMonth}
+            aria-label="이전 달"
+          >
+            <NavIcon src="/chevron-left.svg" alt="이전 달" />
+          </NavButton>
+          <NavButton type="button" onClick={goToNextMonth} aria-label="다음 달">
+            <NavIcon src="/chevron-right.svg" alt="다음 달" />
+          </NavButton>
+        </div>
       </Header>
       <CalendarTable>
         <thead>
@@ -124,12 +121,15 @@ export default function Calendar() {
           ))}
         </tbody>
       </CalendarTable>
+      <CompleteButton type="button" onClick={() => {}}>
+        선택 완료
+      </CompleteButton>
     </CalendarContainer>
   );
 }
 
 const CalendarContainer = twc.div`
-  w-[330px] h-[370px] rounded-[8px] border border-[#E5E5E5] shadow-[0px_4px_15px_-1px_#0000001A,0px_2px_8px_-2px_#0000001A] p-[16px] bg-[#FFFFFF]
+  w-[330px] rounded-[8px] border border-[#E5E5E5] shadow-[0px_4px_15px_-1px_#0000001A,0px_2px_8px_-2px_#0000001A] p-[16px] bg-[#FFFFFF]
   absolute top-full left-1/2 z-100 -translate-x-1/2
 `;
 
@@ -155,10 +155,12 @@ const CalendarTable = twc.table`
   w-full border-collapse
 `;
 
-const TableRow = twc.tr``;
+const TableRow = twc.tr`
+  text-[16px] font-semibold leading-[130%] tracking-[-0.02em] text-[#121212] text-center
+`;
 
 const TableHeaderCell = twc.th`
-  text-[13px] font-semibold text-[#565656] pb-[12px]
+  text-[16px] font-semibold leading-[130%] tracking-[-0.02em] text-[#565656] pb-[12px]
 `;
 
 const DateCell = twc.td`
@@ -171,7 +173,7 @@ const EmptyCell = twc.td`
 
 const DateButtonBase = twc.button`
   w-[44px] h-[44px] rounded-[8px] flex items-center justify-center
-  text-[14px] font-medium transition-colors border border-transparent text-[#121212]
+  text-[18px] font-medium transition-colors border border-transparent text-[#121212]
   cursor-pointer hover:bg-[#F5F5F5] focus:outline-none focus:ring-2 focus:ring-[#121212]/20
 `;
 
@@ -202,3 +204,7 @@ function DateButton({
     </DateButtonBase>
   );
 }
+
+const CompleteButton = twc.button`
+  w-full h-[48px] p-[12px] mt-[16px] text-[20px] font-semibold leading-[130%] tracking-[-0.02em] text-[#FFFFFF] bg-[#03C124] rounded-[6px] cursor-pointer
+`;

@@ -69,13 +69,13 @@ export default function SessionInfoSection() {
                           : "날짜를 선택해주세요"}
                       </DatePickerButton>
                       {openedCalendarId === session.sessionId && (
-                        <CalendarPopover
+                        <div
                           onClick={(event) => {
                             event.stopPropagation();
                           }}
                         >
                           <Calendar />
-                        </CalendarPopover>
+                        </div>
                       )}
                     </DatePickerWrapper>
                   </DatePickerField>
@@ -239,7 +239,7 @@ export default function SessionInfoSection() {
   );
 }
 
-const SessionInfoContainer = twc.div`md:w-[510px] h-[555px] w-[328px] rounded-[8px] bg-[#F7F7F8] px-[20px] py-[28px] gap-[32px] flex flex-col`;
+const SessionInfoContainer = twc.div`md:w-[510px] w-[328px] rounded-[8px] bg-[#F7F7F8] px-[20px] py-[28px] gap-[32px] flex flex-col`;
 
 const SessionHeader = twc.div`flex items-center justify-between w-full`;
 
@@ -275,9 +275,3 @@ const DatePickerButton = twc.button`
 `;
 
 const DatePickerWrapper = twc.div`relative flex-1`;
-
-const CalendarPopover = twc.div`
-  absolute left-0 top-[calc(100%+8px)] w-full z-10
-  border border-[#E5E5E5] bg-white rounded-[12px] p-[12px]
-  shadow-[0px_12px_32px_rgba(0,0,0,0.08)]
-`;
