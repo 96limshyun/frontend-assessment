@@ -1,0 +1,2 @@
+export const ACTIVITY_CONTENT_MIN_LENGTH = 8;
+export const ACTIVITY_CONTENT_MAX_LENGTH = 800;
