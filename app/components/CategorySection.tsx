@@ -60,7 +60,7 @@ export default function CategorySection({
 
         <BottomSheet.Content>
           <BottomSheet.Header
-            title="카테고리 선택"
+            title="카테고리"
             onClose={() => setOpen(false)}
           />
           <div className="w-full px-4 mx-auto md:max-w-[1100px] md:px-0">
