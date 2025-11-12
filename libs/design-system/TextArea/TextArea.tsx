@@ -6,7 +6,7 @@ import {
   TextareaHTMLAttributes,
   useState,
 } from "react";
-import { twc } from "@/libs/utils";
+import { twx } from "@/libs/utils";
 
 const TextAreaRoot = ({ children }: { children: React.ReactNode }) => {
   return <div className="flex w-full flex-col gap-2">{children}</div>;
@@ -87,8 +87,8 @@ const TextAreaInput = forwardRef<HTMLTextAreaElement, TextAreaInputProps>(
           onChange={handleChange}
           onBlur={handleBlur}
           onPaste={handlePaste}
-          className={twc(
-            "w-full resize-none rounded-[8px] border bg-white px-5 py-4 text-base leading-[150%] tracking-[-0.02em] text-[#121212] placeholder:text-[#8F8F8F] focus:outline-none focus:ring-2 transition-colors",
+          className={twx(
+            "w-full h-[138px] resize-none rounded-[8px] border bg-white px-5 py-4 text-base leading-[150%] tracking-[-0.02em] text-[#121212] placeholder:text-[#8F8F8F] focus:outline-none focus:ring-2 transition-colors",
             showCounter && "pb-10",
             internalError || externalError
               ? "border-[#E82920] focus:ring-[#E82920]"

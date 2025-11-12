@@ -1,5 +1,5 @@
 import { type ReactNode, forwardRef, type HTMLAttributes } from "react";
-import { twc } from "@/libs/utils";
+import { twx } from "@/libs/utils";
 import Image from "next/image";
 
 interface SelectTriggerProps extends HTMLAttributes<HTMLDivElement> {
@@ -13,7 +13,7 @@ const SelectTrigger = forwardRef<HTMLDivElement, SelectTriggerProps>(
     return (
       <div
         ref={ref}
-        className={twc(
+        className={twx(
           "flex h-[60px] items-center justify-between rounded-[8px] border border-[#E5E5E5] bg-white px-5 cursor-pointer hover:border-[#BABABA] transition-colors",
           className
         )}
@@ -22,7 +22,7 @@ const SelectTrigger = forwardRef<HTMLDivElement, SelectTriggerProps>(
         {children || (
           <>
             <span
-              className={twc(
+              className={twx(
                 "text-base",
                 value ? "text-[#121212]" : "text-[#8F8F8F]"
               )}

@@ -1,5 +1,5 @@
 import { type ButtonHTMLAttributes, forwardRef, type ReactNode } from "react";
-import { twc } from "@/libs/utils";
+import { twx } from "@/libs/utils";
 
 interface OptionButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   selected?: boolean;
@@ -11,7 +11,7 @@ const OptionButton = forwardRef<HTMLButtonElement, OptionButtonProps>(
     return (
       <button
         ref={ref}
-        className={twc(
+        className={twx(
           "h-[58px] rounded-[8px] border px-5 py-4",
           "text-base font-medium leading-[140%] tracking-[-0.02em]",
           "transition-colors cursor-pointer",

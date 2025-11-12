@@ -1,6 +1,6 @@
 import { type ReactNode } from "react";
 
-import { twc } from "@/libs/utils";
+import { twx } from "@/libs/utils";
 
 interface SectionLayoutProps {
   leftTop: ReactNode;
@@ -16,7 +16,7 @@ export default function SectionLayout({
   className,
 }: SectionLayoutProps) {
   return (
-    <section className={twc("flex w-full justify-center", className)}>
+    <section className={twx("flex w-full justify-center", className)}>
       <div className="grid w-full max-w-[360px] grid-cols-1 gap-10 px-5 pb-[160px] md:max-w-[1100px] md:grid-cols-[repeat(2,510px)] md:justify-between">
         <div className="grid grid-cols-1 gap-10 md:w-[510px]">
           {leftTop}

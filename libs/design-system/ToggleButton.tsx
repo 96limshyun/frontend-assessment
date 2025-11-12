@@ -1,5 +1,5 @@
 import { type ButtonHTMLAttributes } from "react";
-import { twc } from "@/libs/utils";
+import { twx } from "@/libs/utils";
 
 interface ToggleButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   isSelected: boolean;
@@ -13,7 +13,7 @@ export default function ToggleButton({
 }: ToggleButtonProps) {
   return (
     <button
-      className={twc(
+      className={twx(
         "flex h-[58px] w-[251px] items-center justify-center rounded-[8px] border px-5 py-4 text-base font-semibold leading-[140%] tracking-[-0.02em] transition-colors cursor-pointer",
         isSelected
           ? "border-[#03C124] bg-[#E6F9E9] text-[#121212]"

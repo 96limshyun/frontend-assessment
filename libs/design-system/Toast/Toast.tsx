@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { twc } from "@/libs/utils";
+import { twx } from "@/libs/utils";
 
 interface ToastProps {
   message: string;
@@ -25,7 +25,7 @@ export default function Toast({
   return (
     <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[9999] h-[48px] w-[328px] md:w-[528px]">
       <div
-        className={twc(
+        className={twx(
           "rounded-[8px] bg-[#121212] px-6 py-4",
           "text-white text-base font-medium",
           "shadow-lg text-center h-full flex items-center justify-center"

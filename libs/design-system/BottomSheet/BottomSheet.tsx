@@ -2,7 +2,7 @@
 
 import { type PropsWithChildren } from "react";
 import { Drawer } from "vaul";
-import { twc } from "@/libs/utils";
+import { twx } from "@/libs/utils";
 import Image from "next/image";
 
 interface BottomSheetRootProps {
@@ -52,7 +52,7 @@ interface BottomSheetOverlayProps {
 function BottomSheetOverlay({ className }: BottomSheetOverlayProps) {
   return (
     <Drawer.Overlay
-      className={twc("fixed inset-0 pointer-events-none", className)}
+      className={twx("fixed inset-0 pointer-events-none", className)}
     />
   );
 }
@@ -75,7 +75,7 @@ function BottomSheetHeader({
         {title || "다이얼로그 내용"}
       </Drawer.Description>
       <div
-        className={twc(
+        className={twx(
           "relative flex items-center justify-between border-b border-[#E5E5E5] px-4 py-4 md:hidden font-bold",
           className
         )}
@@ -109,7 +109,7 @@ function BottomSheetContent({
   return (
     <Drawer.Portal>
       <Drawer.Content
-        className={twc(
+        className={twx(
           "fixed left-0 right-0 mt-24 flex flex-col rounded-t-[16px] bg-white z-50",
           "bottom-[73px] h-[calc(100vh-73px)] md:bottom-0 md:h-[90vh]",
           className

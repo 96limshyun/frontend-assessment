@@ -1,6 +1,6 @@
 import { type ButtonHTMLAttributes } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { twc } from "@/libs/utils";
+import { twx } from "@/libs/utils";
 
 const nextButtonVariants = cva(
   "text-base font-semibold leading-[140%] tracking-[-0.02em] text-white transition-colors",
@@ -36,7 +36,7 @@ export default function NextButton({
 }: NextButtonProps) {
   return (
     <button
-      className={twc(
+      className={twx(
         nextButtonVariants({ variant, enabled: isEnabled }),
         className
       )}
