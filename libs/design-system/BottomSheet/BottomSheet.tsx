@@ -50,7 +50,11 @@ interface BottomSheetOverlayProps {
 }
 
 function BottomSheetOverlay({ className }: BottomSheetOverlayProps) {
-  return <Drawer.Overlay className={twc("fixed inset-0", className)} />;
+  return (
+    <Drawer.Overlay
+      className={twc("fixed inset-0 pointer-events-none", className)}
+    />
+  );
 }
 
 interface BottomSheetHeaderProps {
@@ -72,7 +76,7 @@ function BottomSheetHeader({
       </Drawer.Description>
       <div
         className={twc(
-          "relative flex items-center justify-between border-b border-[#E5E5E5] px-4 py-4 md:hidden",
+          "relative flex items-center justify-between border-b border-[#E5E5E5] px-4 py-4 md:hidden font-bold",
           className
         )}
       >
@@ -104,11 +108,10 @@ function BottomSheetContent({
 }: PropsWithChildren<BottomSheetContentProps>) {
   return (
     <Drawer.Portal>
-      <BottomSheetOverlay />
       <Drawer.Content
         className={twc(
-          "fixed bottom-0 left-0 right-0 mt-24 flex flex-col rounded-t-[16px] bg-white",
-          "h-screen md:h-[90vh]",
+          "fixed left-0 right-0 mt-24 flex flex-col rounded-t-[16px] bg-white z-50",
+          "bottom-[73px] h-[calc(100vh-73px)] md:bottom-0 md:h-[90vh]",
           className
         )}
       >
