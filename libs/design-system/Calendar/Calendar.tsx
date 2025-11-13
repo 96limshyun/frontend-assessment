@@ -1,3 +1,5 @@
+"use client";
+
 import {
   useMemo,
   useState,
@@ -5,6 +7,8 @@ import {
   type ReactNode,
 } from "react";
 import { twc } from "react-twc";
+
+import { twx } from "@/libs/utils";
 
 const WEEK_DAYS = ["일", "월", "화", "수", "목", "금", "토"];
 
@@ -36,6 +40,7 @@ interface CalendarProps {
   onComplete: () => void;
   minDate?: Date;
   maxDate?: Date;
+  className?: string;
 }
 
 export default function Calendar({
@@ -44,6 +49,7 @@ export default function Calendar({
   onComplete,
   minDate,
   maxDate,
+  className,
 }: CalendarProps) {
   const today = useMemo(() => new Date(), []);
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
@@ -79,8 +85,13 @@ export default function Calendar({
     dateA.getMonth() === dateB.getMonth() &&
     dateA.getDate() === dateB.getDate();
 
+  const containerClassName = twx(
+    "w-[330px] rounded-[8px] border border-[#E5E5E5] shadow-[0px_4px_15px_-1px_#0000001A,0px_2px_8px_-2px_#0000001A] p-[16px] bg-[#FFFFFF]",
+    className
+  );
+
   return (
-    <CalendarContainer>
+    <div className={containerClassName}>
       <Header>
         <Title>
           {currentYear}년 {currentMonth + 1}월
@@ -157,14 +168,9 @@ export default function Calendar({
       <CompleteButton type="button" onClick={onComplete}>
         선택 완료
       </CompleteButton>
-    </CalendarContainer>
+    </div>
   );
 }
-
-const CalendarContainer = twc.div`
-  w-[330px] rounded-[8px] border border-[#E5E5E5] shadow-[0px_4px_15px_-1px_#0000001A,0px_2px_8px_-2px_#0000001A] p-[16px] bg-[#FFFFFF]
-  absolute top-full left-1/2 z-100 -translate-x-1/2
-`;
 
 const Header = twc.div`
   flex items-center justify-between w-full h-[30px] mb-[16px]

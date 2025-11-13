@@ -80,3 +80,15 @@ export const createDefaultSessionInfo = (): SessionInfo => ({
 
 export const sanitizeTimeInput = (value: string) =>
   value.replace(/\D/g, "").slice(0, 2);
+
+export const formatSessionDate = (date: Date | null) => {
+  if (!date) {
+    return "";
+  }
+
+  return date.toLocaleDateString("ko-KR", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+};
