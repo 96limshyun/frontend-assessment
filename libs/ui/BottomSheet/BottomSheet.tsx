@@ -109,6 +109,7 @@ function BottomSheetContent({
   return (
     <Drawer.Portal>
       <Drawer.Content
+        data-vaul-custom-container="true"
         className={twx(
           "fixed left-0 right-0 mt-24 flex flex-col rounded-t-[16px] bg-white z-50",
           "bottom-[73px] h-[calc(100vh-73px)] md:bottom-0 md:h-[90vh]",
