@@ -8,7 +8,7 @@ import {
   EmptyAdditionalImageView,
 } from "@/libs/design-system";
 
-const MAX_FILES = 4;
+import { MAX_ADDITIONAL_IMAGES } from "@/app/constants";
 
 export default function AdditionalImagesUpload() {
   const [files, setFiles] = useState<File[]>([]);
@@ -16,11 +16,11 @@ export default function AdditionalImagesUpload() {
   const handleMultipleFiles = (newFiles: File[]) => {
     setFiles((prev) => {
       const combined = [...prev, ...newFiles];
-      return combined.slice(0, MAX_FILES);
+      return combined.slice(0, MAX_ADDITIONAL_IMAGES);
     });
   };
 
-  const remainingSlots = MAX_FILES - files.length;
+  const remainingSlots = MAX_ADDITIONAL_IMAGES - files.length;
 
   return (
     <SectionCard
@@ -28,7 +28,7 @@ export default function AdditionalImagesUpload() {
       subtitle="최대 4장까지 등록할 수 있어요"
     >
       <div className="flex gap-4 overflow-x-auto md:grid md:grid-cols-2 md:overflow-x-visible">
-        {files.length < MAX_FILES && (
+        {files.length < MAX_ADDITIONAL_IMAGES && (
           <div className="shrink-0 w-[160px] md:w-auto">
             <ImageUploadCard
               file={null}

@@ -3,8 +3,10 @@
 import { useState } from "react";
 import { SectionCard, TextArea } from "@/libs/design-system";
 
-const MIN_LENGTH = 8;
-const MAX_LENGTH = 80;
+import {
+  CONTENT_TITLE_MIN_LENGTH,
+  CONTENT_TITLE_MAX_LENGTH,
+} from "@/app/constants";
 
 export default function ContentTitleSection() {
   const [title, setTitle] = useState("");
@@ -15,15 +17,15 @@ export default function ContentTitleSection() {
         <TextArea.Input
           value={title}
           onChange={setTitle}
-          minLength={MIN_LENGTH}
-          maxLength={MAX_LENGTH}
+          minLength={CONTENT_TITLE_MIN_LENGTH}
+          maxLength={CONTENT_TITLE_MAX_LENGTH}
           placeholder="제목을 입력해주세요"
           className="h-[138px]"
           counterLabel="최소 8자"
         />
         <TextArea.Footer>
-          {title.length > 0 && title.length < MIN_LENGTH && (
-            <TextArea.Error minLength={MIN_LENGTH} />
+          {title.length > 0 && title.length < CONTENT_TITLE_MIN_LENGTH && (
+            <TextArea.Error minLength={CONTENT_TITLE_MIN_LENGTH} />
           )}
         </TextArea.Footer>
       </TextArea.Root>

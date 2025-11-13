@@ -3,10 +3,10 @@
 import { useState } from "react";
 import { SectionCard, ToggleButton } from "@/libs/design-system";
 
+type ActivityType = "online" | "offline";
+
 export default function ActivityTypeSection() {
-  const [activityType, setActivityType] = useState<"online" | "offline" | null>(
-    null
-  );
+  const [activityType, setActivityType] = useState<ActivityType | null>(null);
 
   return (
     <SectionCard

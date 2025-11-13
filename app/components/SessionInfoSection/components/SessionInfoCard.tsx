@@ -59,8 +59,7 @@ const SessionInfoCard = ({
   activityMinLength,
   activityMaxLength,
 }: SessionInfoCardProps) => {
-  const title =
-    totalSessions === 1 ? "회차 정보" : `${index + 1}회차 정보`;
+  const title = totalSessions === 1 ? "회차 정보" : `${index + 1}회차 정보`;
 
   return (
     <SessionInfoContainer>
@@ -113,4 +112,3 @@ const SessionInfoCard = ({
 };
 
 export default SessionInfoCard;
-

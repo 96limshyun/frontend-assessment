@@ -7,6 +7,7 @@ import {
   OptionButton,
 } from "@/libs/design-system";
 import { splitTextIntoParagraphs, showToast } from "@/libs/utils";
+import { CATEGORIES, MAX_SELECTED_CATEGORIES } from "@/app/constants";
 
 interface CategorySectionProps {
   open: boolean;
@@ -14,18 +15,6 @@ interface CategorySectionProps {
   selectedCategories: string[];
   setSelectedCategories: (categories: string[]) => void;
 }
-
-const CATEGORIES = [
-  "용돈 벌기",
-  "디지털",
-  "그림",
-  "글쓰기/독서",
-  "건강/운동",
-  "동기부여/성장",
-  "취미힐링",
-  "외국어",
-];
-
 export default function CategorySection({
   open,
   setOpen,
@@ -36,10 +25,10 @@ export default function CategorySection({
     if (selectedCategories.includes(category)) {
       setSelectedCategories(selectedCategories.filter((c) => c !== category));
     } else {
-      if (selectedCategories.length < 2) {
+      if (selectedCategories.length < MAX_SELECTED_CATEGORIES) {
         setSelectedCategories([...selectedCategories, category]);
       } else {
-        showToast("최대 2개까지 선택 가능해요");
+        showToast(`최대 ${MAX_SELECTED_CATEGORIES}개까지 선택 가능해요`);
       }
     }
   };
@@ -69,7 +58,7 @@ export default function CategorySection({
                 "어떤 카테고리의\n콘텐츠를 만드시나요?",
                 "\n"
               )}
-              subtitle="최대 2개까지 선택 가능합니다."
+              subtitle={`최대 ${MAX_SELECTED_CATEGORIES}개까지 선택 가능합니다.`}
             >
               <div className="grid grid-cols-2 gap-3">
                 {CATEGORIES.map((category) => (
