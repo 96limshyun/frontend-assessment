@@ -11,7 +11,6 @@ interface UseProgramFormReturn {
   categoriesOpen: boolean;
   setCategoriesOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isCategoriesSelected: boolean;
-  isActivitySelected: boolean;
   handleNextClick: () => void;
   handleMainImageChange: (image: File | null) => void;
   handleAdditionalImagesChange: (images: File[]) => void;
@@ -32,13 +31,12 @@ export const useProgramForm = (
     () => programFormState.categories.length > 0,
     [programFormState.categories]
   );
-  const isActivitySelected = programFormState.activityType !== null;
 
   const handleNextClick = useCallback(() => {
-    if (isCategoriesSelected && isActivitySelected) {
+    if (isCategoriesSelected) {
       setCategoriesOpen(false);
     }
-  }, [isActivitySelected, isCategoriesSelected]);
+  }, [isCategoriesSelected]);
 
   const handleMainImageChange = useCallback((image: File | null) => {
     setProgramFormState((prev) => ({ ...prev, mainImage: image }));
@@ -69,7 +67,6 @@ export const useProgramForm = (
     categoriesOpen,
     setCategoriesOpen,
     isCategoriesSelected,
-    isActivitySelected,
     handleNextClick,
     handleMainImageChange,
     handleAdditionalImagesChange,

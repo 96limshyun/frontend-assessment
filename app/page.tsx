@@ -17,7 +17,6 @@ export default function Home() {
     categoriesOpen,
     setCategoriesOpen,
     isCategoriesSelected,
-    isActivitySelected,
     handleNextClick,
     handleMainImageChange,
     handleAdditionalImagesChange,
