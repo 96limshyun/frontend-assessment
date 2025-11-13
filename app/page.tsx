@@ -68,7 +68,7 @@ export default function Home() {
 
       <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-[#E5E5E5] px-5 py-[10px] z-100">
         <NextButton
-          isEnabled={isCategoriesSelected && isActivitySelected}
+          isEnabled={isCategoriesSelected}
           onClick={handleNextClick}
           variant="bottom"
         />

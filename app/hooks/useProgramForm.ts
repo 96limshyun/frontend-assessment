@@ -64,11 +64,6 @@ export const useProgramForm = (
     setProgramFormState((prev) => ({ ...prev, sessionInfo }));
   }, []);
 
-  // 데이터를 확인하기 위한 임시 코드입니다.
-  useEffect(() => {
-    console.log(programFormState);
-  }, [programFormState]);
-
   return {
     programFormState,
     categoriesOpen,
