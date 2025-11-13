@@ -8,10 +8,11 @@ import {
 } from "@/libs/ui";
 import { splitTextIntoParagraphs, showToast } from "@/libs/utils";
 import { CATEGORIES, MAX_SELECTED_CATEGORIES } from "@/app/constants";
+import { Dispatch, SetStateAction } from "react";
 
 interface CategorySectionProps {
   open: boolean;
-  setOpen: (open: boolean) => void;
+  setOpen: Dispatch<SetStateAction<boolean>>;
   selectedCategories: string[];
   onChange: (categories: string[]) => void;
 }

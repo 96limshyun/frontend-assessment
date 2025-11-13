@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { SectionCard, TextArea } from "@/libs/ui";
 
 import {
@@ -8,15 +7,20 @@ import {
   CONTENT_TITLE_MAX_LENGTH,
 } from "@/app/constants";
 
-export default function ContentTitleSection() {
-  const [title, setTitle] = useState("");
-
+interface ContentTitleSectionProps {
+  contentTitle: string;
+  onChange: (contentTitle: string) => void;
+}
+export default function ContentTitleSection({
+  contentTitle,
+  onChange,
+}: ContentTitleSectionProps) {
   return (
     <SectionCard title="콘텐츠 제목">
       <TextArea.Root>
         <TextArea.Input
-          value={title}
-          onChange={setTitle}
+          value={contentTitle}
+          onChange={onChange}
           minLength={CONTENT_TITLE_MIN_LENGTH}
           maxLength={CONTENT_TITLE_MAX_LENGTH}
           placeholder="제목을 입력해주세요"
@@ -24,7 +28,7 @@ export default function ContentTitleSection() {
           counterLabel="최소 8자"
         />
         <TextArea.Footer>
-          {title.length > 0 && title.length < CONTENT_TITLE_MIN_LENGTH && (
+          {contentTitle.length > 0 && contentTitle.length < CONTENT_TITLE_MIN_LENGTH && (
             <TextArea.Error minLength={CONTENT_TITLE_MIN_LENGTH} />
           )}
         </TextArea.Footer>

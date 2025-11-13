@@ -8,11 +8,8 @@ export interface TimeInfo {
 
 export interface SessionInfo {
   sessionId: string;
-  sessionName: string;
   sessionDate: Date | null;
   sessionTimeStart: TimeInfo;
   sessionTimeEnd: TimeInfo;
-  sessionLocation: string;
-  sessionLocationDetail: string;
   activityContent: string;
 }

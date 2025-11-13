@@ -15,8 +15,15 @@ import {
   AddSessionButton,
   SessionsWrapper,
 } from "@/app/components/SessionInfoSection/styles";
+import { SessionInfo } from "@/libs/types/sectionInfo";
+import { useEffect } from "react";
+interface SessionInfoSectionProps {
+  onChange: (sessionInfo: SessionInfo[]) => void;
+}
 
-export default function SessionInfoSection() {
+export default function SessionInfoSection({
+  onChange,
+}: SessionInfoSectionProps) {
   const {
     sessionInfo,
     handleDeleteSession,
@@ -36,6 +43,13 @@ export default function SessionInfoSection() {
 
   const today = useMemo(() => normalizeDate(new Date()), []);
   const sessionDateLimits = useSessionDateLimits(sessionInfo, today);
+
+  useEffect(() => {
+    onChange(sessionInfo);
+    // programSessionInfo/onChange을 의존성에 포함하면 상위 상태 갱신 → 하위 효과 재실행 루프가 발생하므로
+    // sessionInfo만 추적하고 ESLint 규칙은 예외 처리한다.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sessionInfo]);
 
   return (
     <>

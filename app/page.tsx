@@ -9,25 +9,23 @@ import {
   ActivityTypeSection,
   SessionInfoSection,
 } from "@/app/components";
-import { useState } from "react";
-import { ProgramFormState } from "@/libs/types/programForm";
-import { INITIAL_PROGRAM_FORM_STATE } from "@/app/constants";
+import { useProgramForm } from "@/app/hooks/useProgramForm";
 
 export default function Home() {
-  const [programFormState, setProgramFormState] = useState<ProgramFormState>(
-    INITIAL_PROGRAM_FORM_STATE
-  );
-  const [open, setOpen] = useState(false);
-
-  const isCategoriesSelected = programFormState.categories.length > 0;
-  const isActivitySelected = programFormState.activityType !== null;
-
-  const handleNextClick = () => {
-    if (isCategoriesSelected && isActivitySelected) {
-      setOpen(false);
-    }
-  };
-
+  const {
+    programFormState,
+    categoriesOpen,
+    setCategoriesOpen,
+    isCategoriesSelected,
+    isActivitySelected,
+    handleNextClick,
+    handleMainImageChange,
+    handleAdditionalImagesChange,
+    handleCategoriesChange,
+    handleContentTitleChange,
+    handleActivityTypeChange,
+    handleSessionInfoChange,
+  } = useProgramForm();
   return (
     <>
       <Header
@@ -38,40 +36,32 @@ export default function Home() {
         leftTop={
           <MainImageUpload
             mainImage={programFormState.mainImage}
-            setMainImage={(image) =>
-              setProgramFormState((prev) => ({ ...prev, mainImage: image }))
-            }
+            setMainImage={handleMainImageChange}
           />
         }
         leftBottom={
           <AdditionalImagesUpload
             additionalImages={programFormState.additionalImages}
-            onChange={(images) =>
-              setProgramFormState((prev) => ({
-                ...prev,
-                additionalImages: images,
-              }))
-            }
+            onChange={handleAdditionalImagesChange}
           />
         }
         right={
           <div className="flex flex-col pb-[93px] md:pb-0">
             <CategorySection
-              open={open}
-              setOpen={setOpen}
+              open={categoriesOpen}
+              setOpen={setCategoriesOpen}
               selectedCategories={programFormState.categories}
-              onChange={(categories) =>
-                setProgramFormState((prev) => ({ ...prev, categories }))
-              }
+              onChange={handleCategoriesChange}
             />
-            <ContentTitleSection />
+            <ContentTitleSection
+              contentTitle={programFormState.contentTitle}
+              onChange={handleContentTitleChange}
+            />
             <ActivityTypeSection
               activityType={programFormState.activityType}
-              onChange={(activityType) =>
-                setProgramFormState((prev) => ({ ...prev, activityType }))
-              }
+              onChange={handleActivityTypeChange}
             />
-            <SessionInfoSection />
+            <SessionInfoSection onChange={handleSessionInfoChange} />
           </div>
         }
       />
