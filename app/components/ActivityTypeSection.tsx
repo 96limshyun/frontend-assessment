@@ -1,13 +1,17 @@
 "use client";
 
-import { useState } from "react";
 import { SectionCard, ToggleButton } from "@/libs/ui";
+import type { ActivityType } from "@/libs/types/programForm";
 
-type ActivityType = "online" | "offline";
+interface ActivityTypeSectionProps {
+  activityType: ActivityType | null;
+  onChange: (type: ActivityType) => void;
+}
 
-export default function ActivityTypeSection() {
-  const [activityType, setActivityType] = useState<ActivityType | null>(null);
-
+export default function ActivityTypeSection({
+  activityType,
+  onChange,
+}: ActivityTypeSectionProps) {
   return (
     <SectionCard
       title="활동 방식 선택"
@@ -16,13 +20,13 @@ export default function ActivityTypeSection() {
       <div className="flex gap-[8px]">
         <ToggleButton
           isSelected={activityType === "online"}
-          onClick={() => setActivityType("online")}
+          onClick={() => onChange("online")}
         >
           온라인
         </ToggleButton>
         <ToggleButton
           isSelected={activityType === "offline"}
-          onClick={() => setActivityType("offline")}
+          onClick={() => onChange("offline")}
         >
           직접 만나기
         </ToggleButton>

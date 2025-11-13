@@ -10,15 +10,20 @@ import {
   SessionInfoSection,
 } from "@/app/components";
 import { useState } from "react";
+import { ProgramFormState } from "@/libs/types/programForm";
+import { INITIAL_PROGRAM_FORM_STATE } from "@/app/constants";
 
 export default function Home() {
+  const [programFormState, setProgramFormState] = useState<ProgramFormState>(
+    INITIAL_PROGRAM_FORM_STATE
+  );
   const [open, setOpen] = useState(false);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
-  const isCategoriesSelected = selectedCategories.length > 0;
+  const isCategoriesSelected = programFormState.categories.length > 0;
+  const isActivitySelected = programFormState.activityType !== null;
 
   const handleNextClick = () => {
-    if (isCategoriesSelected) {
+    if (isCategoriesSelected && isActivitySelected) {
       setOpen(false);
     }
   };
@@ -26,22 +31,46 @@ export default function Home() {
   return (
     <>
       <Header
-        selectedCategories={selectedCategories}
+        selectedCategories={programFormState.categories}
         onClick={handleNextClick}
       />
       <SectionLayout
-        leftTop={<MainImageUpload />}
-        leftBottom={<AdditionalImagesUpload />}
+        leftTop={
+          <MainImageUpload
+            mainImage={programFormState.mainImage}
+            setMainImage={(image) =>
+              setProgramFormState((prev) => ({ ...prev, mainImage: image }))
+            }
+          />
+        }
+        leftBottom={
+          <AdditionalImagesUpload
+            additionalImages={programFormState.additionalImages}
+            onChange={(images) =>
+              setProgramFormState((prev) => ({
+                ...prev,
+                additionalImages: images,
+              }))
+            }
+          />
+        }
         right={
           <div className="flex flex-col pb-[93px] md:pb-0">
             <CategorySection
               open={open}
               setOpen={setOpen}
-              selectedCategories={selectedCategories}
-              setSelectedCategories={setSelectedCategories}
+              selectedCategories={programFormState.categories}
+              onChange={(categories) =>
+                setProgramFormState((prev) => ({ ...prev, categories }))
+              }
             />
             <ContentTitleSection />
-            <ActivityTypeSection />
+            <ActivityTypeSection
+              activityType={programFormState.activityType}
+              onChange={(activityType) =>
+                setProgramFormState((prev) => ({ ...prev, activityType }))
+              }
+            />
             <SessionInfoSection />
           </div>
         }
@@ -49,7 +78,7 @@ export default function Home() {
 
       <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-[#E5E5E5] px-5 py-[10px] z-100">
         <NextButton
-          isEnabled={isCategoriesSelected}
+          isEnabled={isCategoriesSelected && isActivitySelected}
           onClick={handleNextClick}
           variant="bottom"
         />

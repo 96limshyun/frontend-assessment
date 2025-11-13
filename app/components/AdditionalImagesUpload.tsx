@@ -1,7 +1,3 @@
-"use client";
-
-import { useState } from "react";
-
 import {
   SectionCard,
   ImageUploadCard,
@@ -10,17 +6,22 @@ import {
 
 import { MAX_ADDITIONAL_IMAGES } from "@/app/constants";
 
-export default function AdditionalImagesUpload() {
-  const [files, setFiles] = useState<File[]>([]);
+interface AdditionalImagesUploadProps {
+  additionalImages: File[];
+  onChange: (images: File[]) => void;
+}
+
+export default function AdditionalImagesUpload({
+  additionalImages,
+  onChange,
+}: AdditionalImagesUploadProps) {
+  const remainingSlots = MAX_ADDITIONAL_IMAGES - additionalImages.length;
 
   const handleMultipleFiles = (newFiles: File[]) => {
-    setFiles((prev) => {
-      const combined = [...prev, ...newFiles];
-      return combined.slice(0, MAX_ADDITIONAL_IMAGES);
-    });
+    const combined = [...additionalImages, ...newFiles];
+    const newImages = combined.slice(0, MAX_ADDITIONAL_IMAGES);
+    onChange(newImages);
   };
-
-  const remainingSlots = MAX_ADDITIONAL_IMAGES - files.length;
 
   return (
     <SectionCard
@@ -28,13 +29,21 @@ export default function AdditionalImagesUpload() {
       subtitle="최대 4장까지 등록할 수 있어요"
     >
       <div className="flex gap-4 overflow-x-auto md:grid md:grid-cols-2 md:overflow-x-visible">
-        {files.length < MAX_ADDITIONAL_IMAGES && (
+        {additionalImages.length < MAX_ADDITIONAL_IMAGES && (
           <div className="shrink-0 w-[160px] md:w-auto">
             <ImageUploadCard
               file={null}
               size="small"
               setFile={(newFile) => {
-                if (newFile) setFiles((prev) => [...prev, newFile]);
+                if (!newFile) {
+                  return;
+                }
+
+                const nextImages = [...additionalImages, newFile].slice(
+                  0,
+                  MAX_ADDITIONAL_IMAGES
+                );
+                onChange(nextImages);
               }}
               setFiles={handleMultipleFiles}
               emptyFileView={<EmptyAdditionalImageView />}
@@ -43,7 +52,7 @@ export default function AdditionalImagesUpload() {
             />
           </div>
         )}
-        {files.map((file, index) => (
+        {additionalImages.map((file, index) => (
           <div
             key={`${file.name}-${index}`}
             className="shrink-0 w-[160px] md:w-auto"
@@ -52,15 +61,14 @@ export default function AdditionalImagesUpload() {
               file={file}
               size="small"
               setFile={(newFile) => {
-                if (newFile) {
-                  setFiles((prev) => {
-                    const updated = [...prev];
-                    updated[index] = newFile;
-                    return updated;
-                  });
-                } else {
-                  setFiles((prev) => prev.filter((_, i) => i !== index));
+                if (!newFile) {
+                  onChange(additionalImages.filter((_, i) => i !== index));
+                  return;
                 }
+
+                const updated = [...additionalImages];
+                updated[index] = newFile;
+                onChange(updated);
               }}
             />
           </div>

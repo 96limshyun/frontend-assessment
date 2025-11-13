@@ -13,20 +13,20 @@ interface CategorySectionProps {
   open: boolean;
   setOpen: (open: boolean) => void;
   selectedCategories: string[];
-  setSelectedCategories: (categories: string[]) => void;
+  onChange: (categories: string[]) => void;
 }
 export default function CategorySection({
   open,
   setOpen,
   selectedCategories,
-  setSelectedCategories,
+  onChange,
 }: CategorySectionProps) {
   const handleCategoryClick = (category: string) => {
     if (selectedCategories.includes(category)) {
-      setSelectedCategories(selectedCategories.filter((c) => c !== category));
+      onChange(selectedCategories.filter((c) => c !== category));
     } else {
       if (selectedCategories.length < MAX_SELECTED_CATEGORIES) {
-        setSelectedCategories([...selectedCategories, category]);
+        onChange([...selectedCategories, category]);
       } else {
         showToast(`최대 ${MAX_SELECTED_CATEGORIES}개까지 선택 가능해요`);
       }
