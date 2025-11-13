@@ -86,7 +86,7 @@ export default function Calendar({
     dateA.getDate() === dateB.getDate();
 
   const containerClassName = twx(
-    "w-[330px] rounded-[8px] border border-[#E5E5E5] shadow-[0px_4px_15px_-1px_#0000001A,0px_2px_8px_-2px_#0000001A] p-[16px] bg-[#FFFFFF]",
+    "w-[280px] md:w-[330px] rounded-[8px] border border-[#E5E5E5] shadow-[0px_4px_15px_-1px_#0000001A,0px_2px_8px_-2px_#0000001A] p-[16px] bg-[#FFFFFF] ",
     className
   );
 
@@ -211,8 +211,8 @@ const EmptyCell = twc.td`
 `;
 
 const DateButtonBase = twc.button`
-  w-[44px] h-[44px] rounded-[8px] flex items-center justify-center
-  text-[18px] font-medium border border-transparent text-[#121212]
+  w-[36px] h-[36px] md:w-[44px] md:h-[44px] rounded-[8px] flex items-center justify-center
+  text-[16px] md:text-[18px] font-medium border border-transparent text-[#121212]
   cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#121212]/20
 `;
 

@@ -29,7 +29,7 @@ export default function DetailInfoSection() {
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             placeholder="날짜를 선택해주세요"
-            className="flex-1 rounded-[8px] border border-[#E5E5E5] bg-white px-4 py-3 text-base leading-[150%] tracking-[-0.02em] text-[#121212] placeholder:text-[#8F8F8F] focus:outline-none focus:ring-2 focus:ring-[#121212]"
+            className="flex-1 text-[20px] rounded-[8px] border border-[#E5E5E5] bg-white px-4 py-3 text-base leading-[150%] tracking-[-0.02em] text-[#121212] placeholder:text-[#8F8F8F] focus:outline-none focus:ring-2 focus:ring-[#121212]"
           />
         </div>
 

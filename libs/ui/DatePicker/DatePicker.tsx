@@ -135,8 +135,8 @@ interface ContentProps {
 }
 
 const ContentWrapper = twc.div`
-  absolute left-0 top-[calc(100%+8px)] z-10 w-full
-  rounded-[12px] border border-[#E5E5E5] bg-white p-[12px]
+  absolute right-0 top-full z-10
+  flex justify-end md:justify-start
   shadow-[0px_12px_32px_rgba(0,0,0,0.08)]
 `;
 

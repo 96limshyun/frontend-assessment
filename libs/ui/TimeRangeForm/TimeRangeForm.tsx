@@ -9,7 +9,7 @@ const Label = twc.span`
 `;
 
 const TimeGroup = twc.div`
-  flex flex-1 justify-around items-center
+  flex flex-1 justify-around items-center pl-[10px]
   rounded-[8px] border border-[#E5E5E5] bg-white py-[8px]
 `;
 
