@@ -13,7 +13,9 @@ import SessionActivityField from "./SessionActivityField";
 import SessionDateField from "./SessionDateField";
 import SessionTimeField, { TimeFieldKey } from "./SessionTimeField";
 import type { SessionInfo } from "@/libs/types/sectionInfo";
-
+import { overlay } from "overlay-kit";
+import { splitTextIntoParagraphs } from "@/libs/utils";
+import Dialog from "@/libs/design-system/Dialog";
 interface SessionInfoCardProps {
   session: SessionInfo;
   index: number;
@@ -61,12 +63,30 @@ const SessionInfoCard = ({
 }: SessionInfoCardProps) => {
   const title = totalSessions === 1 ? "회차 정보" : `${index + 1}회차 정보`;
 
+  const handleDelete = () => {
+    overlay.open(({ isOpen, close }) => {
+      if (!isOpen) return null;
+
+      return (
+        <Dialog
+          title={splitTextIntoParagraphs(
+            "작성된 내용을\n삭제하시겠어요?",
+            "\n"
+          )}
+          description="삭제한 내용은 복구할 수 없습니다."
+          onDelete={onDelete}
+          onCancel={close}
+        />
+      );
+    });
+  };
+
   return (
     <SessionInfoContainer>
       <SessionHeader>
         <SessionTitle>{title}</SessionTitle>
         {totalSessions > 1 && (
-          <CloseButton onClick={onDelete}>
+          <CloseButton onClick={handleDelete}>
             <Image src="/close.svg" alt="닫기" width={68} height={68} />
           </CloseButton>
         )}
