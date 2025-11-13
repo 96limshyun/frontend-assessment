@@ -38,6 +38,8 @@ libs/
   types/                    # `ProgramFormState`, `SessionInfo` 등 타입 선언
 ```
 
+> 위 구조는 Next.js(App Router)에서 권장하는 `app/` 중심 라우팅 구조와 공용 모듈 분리를 그대로 따릅니다.
+
 ### `app/` 도메인 로직
 
 - `page.tsx`: 폼 상태를 조합해 화면을 렌더링하는 엔트리.
