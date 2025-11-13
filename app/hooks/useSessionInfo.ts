@@ -6,6 +6,7 @@ import {
   convertTo24Hour,
   createDefaultSessionInfo,
   sanitizeTimeInput,
+  normalizeDate,
 } from "@/libs/utils/sessionTime";
 import { showToast } from "@/libs/utils/toast";
 
@@ -60,7 +61,9 @@ export const useSessionInfo = (): UseSessionInfoReturn => {
   const handleSessionDateChange = (sessionId: string, date: Date) => {
     setSessionInfo((prev) =>
       prev.map((item) =>
-        item.sessionId === sessionId ? { ...item, sessionDate: date } : item
+        item.sessionId === sessionId
+          ? { ...item, sessionDate: normalizeDate(date) }
+          : item
       )
     );
   };

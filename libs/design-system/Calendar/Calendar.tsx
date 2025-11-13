@@ -34,9 +34,17 @@ interface CalendarProps {
   selectedDate: Date;
   onDateChange: (date: Date) => void;
   onComplete: () => void;
+  minDate?: Date;
+  maxDate?: Date;
 }
 
-export default function Calendar({ selectedDate, onDateChange, onComplete }: CalendarProps) {
+export default function Calendar({
+  selectedDate,
+  onDateChange,
+  onComplete,
+  minDate,
+  maxDate,
+}: CalendarProps) {
   const today = useMemo(() => new Date(), []);
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [currentMonth, setCurrentMonth] = useState(today.getMonth());
@@ -106,16 +114,36 @@ export default function Calendar({ selectedDate, onDateChange, onComplete }: Cal
                   return <EmptyCell key={`empty-${weekIndex}-${dayIndex}`} />;
                 }
 
+                const monthStart = new Date(currentYear, currentMonth, 1);
+                const nextMonthStart = new Date(
+                  currentYear,
+                  currentMonth + 1,
+                  1
+                );
+
                 const isToday = isSameDay(date, today);
                 const isSelected = isSameDay(date, selectedDate);
+                const isCurrentMonth =
+                  date >= monthStart && date < nextMonthStart;
+                const isPreviousMonth = date < monthStart;
+                const isNextMonth = date >= nextMonthStart;
+
+                const isDisabled =
+                  (minDate && date < minDate) ||
+                  (maxDate && date > maxDate) ||
+                  isPreviousMonth;
 
                 return (
-                  <DateCell key={date.toISOString()}>
+                  <DateCell key={`${weekIndex}-${dayIndex}`}>
                     <DateButton
                       type="button"
                       isToday={isToday}
                       isSelected={isSelected}
+                      isPreviousMonth={isPreviousMonth}
+                      isCurrentMonth={isCurrentMonth}
+                      isNextMonth={isNextMonth}
                       onClick={() => onDateChange(date)}
+                      disabled={isDisabled}
                     >
                       {date.getDate()}
                     </DateButton>
@@ -186,6 +214,10 @@ interface DateButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   isToday: boolean;
   children: ReactNode;
   isSelected: boolean;
+  isPreviousMonth: boolean;
+  isCurrentMonth: boolean;
+  isNextMonth: boolean;
+  disabled: boolean;
 }
 
 function DateButton({
@@ -193,18 +225,26 @@ function DateButton({
   className,
   children,
   isSelected,
+  isPreviousMonth,
+  isCurrentMonth,
+  isNextMonth,
+  disabled,
   ...props
 }: DateButtonProps) {
   const states = [
-    isToday ? "border-[#121212]" : "",
-    isSelected ? "bg-[#00B564] text-[#FFFFFF] border-[#00B564]" : "",
+    isCurrentMonth ? "text-[#121212]" : "",
+    isPreviousMonth ? "text-[#E5E5E5]" : "",
+    isNextMonth ? "text-[#8F8F8F]" : "",
+    isToday ? "bg-[#03C124] text-[#FFFFFF] border-[#03C124] font-bold" : "",
+    isSelected ? "bg-[#03C124] text-[#FFFFFF] border-[#03C124] font-bold" : "",
+    disabled ? "text-[#E5E5E5] cursor-not-allowed" : "",
     className ?? "",
   ]
     .filter(Boolean)
     .join(" ");
 
   return (
-    <DateButtonBase {...props} className={states}>
+    <DateButtonBase {...props} className={states} disabled={disabled}>
       {children}
     </DateButtonBase>
   );

@@ -2,6 +2,19 @@ import { TimeInfo } from "@/libs/types/sectionInfo";
 import { v4 as uuidv4 } from "uuid";
 import { SessionInfo } from "@/libs/types/sectionInfo";
 
+export const normalizeDate = (date: Date): Date => {
+  const normalized = new Date(date);
+  normalized.setHours(0, 0, 0, 0);
+  return normalized;
+};
+
+export const addDays = (date: Date, days: number): Date => {
+  const base = normalizeDate(date);
+  const result = new Date(base);
+  result.setDate(base.getDate() + days);
+  return result;
+};
+
 export const convertTo24Hour = (time: TimeInfo): number => {
   const hour = parseInt(time.hour, 10);
   const minute = parseInt(time.minute, 10);

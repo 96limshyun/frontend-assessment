@@ -11,6 +11,8 @@ import {
   ACTIVITY_CONTENT_MAX_LENGTH,
 } from "@/app/constants";
 import { useSessionInfo } from "@/app/hooks/useSessionInfo";
+import { useMemo } from "react";
+import { addDays, normalizeDate } from "@/libs/utils/sessionTime";
 
 export default function SessionInfoSection() {
   const {
@@ -30,214 +32,261 @@ export default function SessionInfoSection() {
     setOpenedCalendarId,
   } = useSessionInfo();
 
+  const today = useMemo(() => normalizeDate(new Date()), []);
+
+  const sessionDateLimits = useMemo(
+    () =>
+      sessionInfo.map((_, index) => {
+        const previousSessionDate =
+          index > 0 ? sessionInfo[index - 1]?.sessionDate : null;
+        const nextSessionDate =
+          index < sessionInfo.length - 1
+            ? sessionInfo[index + 1]?.sessionDate
+            : null;
+
+        const minDate = previousSessionDate
+          ? addDays(previousSessionDate, 1)
+          : today;
+        const maxDate = nextSessionDate
+          ? addDays(nextSessionDate, -1)
+          : undefined;
+
+        return {
+          minDate: minDate ? normalizeDate(minDate) : undefined,
+          maxDate: maxDate ? normalizeDate(maxDate) : undefined,
+        };
+      }),
+    [sessionInfo, today]
+  );
+
   return (
     <>
       <SectionCard title="상세 정보">
         <div className="flex flex-col gap-[20px]">
-          {sessionInfo.map((session, index) => (
-            <SessionInfoContainer key={session.sessionId}>
-              <SessionHeader>
-                <SessionTitle>
-                  {sessionInfo.length === 1
-                    ? "회차 정보"
-                    : `${index + 1}회차 정보`}
-                </SessionTitle>
-                {sessionInfo.length > 1 && (
-                  <CloseButton
-                    onClick={() => handleDeleteSession(session.sessionId)}
-                  >
-                    <Image src="/close.svg" alt="닫기" width={68} height={68} />
-                  </CloseButton>
-                )}
-              </SessionHeader>
-              <SessionContent>
-                <div className="flex flex-col gap-[12px] md:gap-[16px] w-full">
-                  <DatePickerField>
-                    <DatePickerLabel>날짜 선택</DatePickerLabel>
-                    <DatePickerWrapper>
-                      <DatePickerButton
-                        type="button"
-                        onClick={() => {
-                          setOpenedCalendarId((prev: string | null) =>
-                            prev === session.sessionId
-                              ? null
-                              : session.sessionId
-                          );
-                        }}
-                      >
-                        {session.sessionDate
-                          ? session.sessionDate.toLocaleDateString()
-                          : "날짜를 선택해주세요"}
-                      </DatePickerButton>
-                      {openedCalendarId === session.sessionId && (
-                        <div
-                          onClick={(event) => {
-                            event.stopPropagation();
+          {sessionInfo.map((session, index) => {
+            const { minDate, maxDate } = sessionDateLimits[index] ?? {};
+
+            const defaultSelectedDate = session.sessionDate ?? minDate ?? today;
+
+            return (
+              <SessionInfoContainer key={session.sessionId}>
+                <SessionHeader>
+                  <SessionTitle>
+                    {sessionInfo.length === 1
+                      ? "회차 정보"
+                      : `${index + 1}회차 정보`}
+                  </SessionTitle>
+                  {sessionInfo.length > 1 && (
+                    <CloseButton
+                      onClick={() => handleDeleteSession(session.sessionId)}
+                    >
+                      <Image
+                        src="/close.svg"
+                        alt="닫기"
+                        width={68}
+                        height={68}
+                      />
+                    </CloseButton>
+                  )}
+                </SessionHeader>
+                <SessionContent>
+                  <div className="flex flex-col gap-[12px] md:gap-[16px] w-full">
+                    <DatePickerField>
+                      <DatePickerLabel>날짜 선택</DatePickerLabel>
+                      <DatePickerWrapper>
+                        <DatePickerButton
+                          type="button"
+                          onClick={() => {
+                            setOpenedCalendarId((prev: string | null) =>
+                              prev === session.sessionId
+                                ? null
+                                : session.sessionId
+                            );
                           }}
                         >
-                          <Calendar
-
-                            selectedDate={session.sessionDate ?? new Date()}
-                            onDateChange={(date: Date) =>
-                              handleSessionDateChange(session.sessionId, date)
-                            }
-                            onComplete={handleCompleteSessionDate}
-                          />
-                        </div>
-                      )}
-                    </DatePickerWrapper>
-                  </DatePickerField>
-                  <TimeRangeForm.Field>
-                    <TimeRangeForm.Label>시작 시간</TimeRangeForm.Label>
-                    <TimeRangeForm.TimeGroup>
-                      <TimeRangeForm.PeriodButton
-                        onClick={() =>
-                          handleStartPeriodToggle(
-                            session.sessionId,
-                            session.sessionTimeStart.period
-                          )
-                        }
-                      >
-                        {session.sessionTimeStart.period}
-                      </TimeRangeForm.PeriodButton>
-                      <TimeRangeForm.TimeInput
-                        value={session.sessionTimeStart.hour}
-                        min={0}
-                        max={12}
-                        onChange={(
-                          event: React.ChangeEvent<HTMLInputElement>
-                        ) =>
-                          handleStartTimeChange(
-                            session.sessionId,
-                            "hour",
-                            event.target.value
-                          )
-                        }
-                        onBlur={(event: React.ChangeEvent<HTMLInputElement>) =>
-                          handleStartTimeBlur(
-                            session.sessionId,
-                            "hour",
-                            event.target.value
-                          )
-                        }
-                      />
-                      <TimeRangeForm.TimeSeparator>
-                        :
-                      </TimeRangeForm.TimeSeparator>
-                      <TimeRangeForm.TimeInput
-                        value={session.sessionTimeStart.minute}
-                        min={0}
-                        max={59}
-                        onChange={(
-                          event: React.ChangeEvent<HTMLInputElement>
-                        ) =>
-                          handleStartTimeChange(
-                            session.sessionId,
-                            "minute",
-                            event.target.value
-                          )
-                        }
-                        onBlur={(event: React.ChangeEvent<HTMLInputElement>) =>
-                          handleStartTimeBlur(
-                            session.sessionId,
-                            "minute",
-                            event.target.value
-                          )
-                        }
-                      />
-                    </TimeRangeForm.TimeGroup>
-                  </TimeRangeForm.Field>
-                  <TimeRangeForm.Field>
-                    <TimeRangeForm.Label>종료 시간</TimeRangeForm.Label>
-                    <TimeRangeForm.TimeGroup>
-                      <TimeRangeForm.PeriodButton
-                        onClick={() => {
-                          handleEndPeriodToggle(
-                            session.sessionId,
-                            session,
-                            session.sessionTimeEnd.period
-                          );
-                        }}
-                      >
-                        {session.sessionTimeEnd.period}
-                      </TimeRangeForm.PeriodButton>
-                      <TimeRangeForm.TimeInput
-                        value={session.sessionTimeEnd.hour}
-                        min={0}
-                        max={12}
-                        onChange={(
-                          event: React.ChangeEvent<HTMLInputElement>
-                        ) =>
-                          handleEndTimeChange(
-                            session.sessionId,
-                            "hour",
-                            event.target.value
-                          )
-                        }
-                        onBlur={(event: React.ChangeEvent<HTMLInputElement>) =>
-                          handleEndTimeBlur(
-                            session.sessionId,
-                            session,
-                            "hour",
-                            event.target.value
-                          )
-                        }
-                      />
-                      <TimeRangeForm.TimeSeparator>
-                        :
-                      </TimeRangeForm.TimeSeparator>
-                      <TimeRangeForm.TimeInput
-                        value={session.sessionTimeEnd.minute}
-                        min={0}
-                        max={59}
-                        onChange={(
-                          event: React.ChangeEvent<HTMLInputElement>
-                        ) =>
-                          handleEndTimeChange(
-                            session.sessionId,
-                            "minute",
-                            event.target.value
-                          )
-                        }
-                        onBlur={(event: React.ChangeEvent<HTMLInputElement>) =>
-                          handleEndTimeBlur(
-                            session.sessionId,
-                            session,
-                            "minute",
-                            event.target.value
-                          )
-                        }
-                      />
-                    </TimeRangeForm.TimeGroup>
-                  </TimeRangeForm.Field>
-                </div>
-              </SessionContent>
-              <ActivityContent>
-                <SessionTitle>활동 내용</SessionTitle>
-                <SubTitle>날짜별 활동 내용을 간단히 적어주세요</SubTitle>
-                <TextArea.Root>
-                  <TextArea.Input
-                    minLength={ACTIVITY_CONTENT_MIN_LENGTH}
-                    maxLength={ACTIVITY_CONTENT_MAX_LENGTH}
-                    value={session.activityContent}
-                    placeholder="활동 내용을 간단히 입력해주세요"
-                    onChange={(value: string) =>
-                      handleActivityContentChange(session.sessionId, value)
-                    }
-                  />
-                  <TextArea.Footer>
-                    {session.activityContent.length > 0 &&
-                      session.activityContent.length <
-                        ACTIVITY_CONTENT_MIN_LENGTH && (
-                        <TextArea.Error
-                          minLength={ACTIVITY_CONTENT_MIN_LENGTH}
+                          {session.sessionDate
+                            ? session.sessionDate.toLocaleDateString()
+                            : "날짜를 선택해주세요"}
+                        </DatePickerButton>
+                        {openedCalendarId === session.sessionId && (
+                          <CalendarPopover
+                            onClick={(event) => {
+                              event.stopPropagation();
+                            }}
+                          >
+                            <Calendar
+                              selectedDate={defaultSelectedDate}
+                              minDate={minDate}
+                              maxDate={maxDate}
+                              onDateChange={(date) =>
+                                handleSessionDateChange(session.sessionId, date)
+                              }
+                              onComplete={handleCompleteSessionDate}
+                            />
+                          </CalendarPopover>
+                        )}
+                      </DatePickerWrapper>
+                    </DatePickerField>
+                    <TimeRangeForm.Field>
+                      <TimeRangeForm.Label>시작 시간</TimeRangeForm.Label>
+                      <TimeRangeForm.TimeGroup>
+                        <TimeRangeForm.PeriodButton
+                          onClick={() =>
+                            handleStartPeriodToggle(
+                              session.sessionId,
+                              session.sessionTimeStart.period
+                            )
+                          }
+                        >
+                          {session.sessionTimeStart.period}
+                        </TimeRangeForm.PeriodButton>
+                        <TimeRangeForm.TimeInput
+                          value={session.sessionTimeStart.hour}
+                          min={0}
+                          max={12}
+                          onChange={(
+                            event: React.ChangeEvent<HTMLInputElement>
+                          ) =>
+                            handleStartTimeChange(
+                              session.sessionId,
+                              "hour",
+                              event.target.value
+                            )
+                          }
+                          onBlur={(
+                            event: React.ChangeEvent<HTMLInputElement>
+                          ) =>
+                            handleStartTimeBlur(
+                              session.sessionId,
+                              "hour",
+                              event.target.value
+                            )
+                          }
                         />
-                      )}
-                  </TextArea.Footer>
-                </TextArea.Root>
-              </ActivityContent>
-            </SessionInfoContainer>
-          ))}
+                        <TimeRangeForm.TimeSeparator>
+                          :
+                        </TimeRangeForm.TimeSeparator>
+                        <TimeRangeForm.TimeInput
+                          value={session.sessionTimeStart.minute}
+                          min={0}
+                          max={59}
+                          onChange={(
+                            event: React.ChangeEvent<HTMLInputElement>
+                          ) =>
+                            handleStartTimeChange(
+                              session.sessionId,
+                              "minute",
+                              event.target.value
+                            )
+                          }
+                          onBlur={(
+                            event: React.ChangeEvent<HTMLInputElement>
+                          ) =>
+                            handleStartTimeBlur(
+                              session.sessionId,
+                              "minute",
+                              event.target.value
+                            )
+                          }
+                        />
+                      </TimeRangeForm.TimeGroup>
+                    </TimeRangeForm.Field>
+                    <TimeRangeForm.Field>
+                      <TimeRangeForm.Label>종료 시간</TimeRangeForm.Label>
+                      <TimeRangeForm.TimeGroup>
+                        <TimeRangeForm.PeriodButton
+                          onClick={() => {
+                            handleEndPeriodToggle(
+                              session.sessionId,
+                              session,
+                              session.sessionTimeEnd.period
+                            );
+                          }}
+                        >
+                          {session.sessionTimeEnd.period}
+                        </TimeRangeForm.PeriodButton>
+                        <TimeRangeForm.TimeInput
+                          value={session.sessionTimeEnd.hour}
+                          min={0}
+                          max={12}
+                          onChange={(
+                            event: React.ChangeEvent<HTMLInputElement>
+                          ) =>
+                            handleEndTimeChange(
+                              session.sessionId,
+                              "hour",
+                              event.target.value
+                            )
+                          }
+                          onBlur={(
+                            event: React.ChangeEvent<HTMLInputElement>
+                          ) =>
+                            handleEndTimeBlur(
+                              session.sessionId,
+                              session,
+                              "hour",
+                              event.target.value
+                            )
+                          }
+                        />
+                        <TimeRangeForm.TimeSeparator>
+                          :
+                        </TimeRangeForm.TimeSeparator>
+                        <TimeRangeForm.TimeInput
+                          value={session.sessionTimeEnd.minute}
+                          min={0}
+                          max={59}
+                          onChange={(
+                            event: React.ChangeEvent<HTMLInputElement>
+                          ) =>
+                            handleEndTimeChange(
+                              session.sessionId,
+                              "minute",
+                              event.target.value
+                            )
+                          }
+                          onBlur={(
+                            event: React.ChangeEvent<HTMLInputElement>
+                          ) =>
+                            handleEndTimeBlur(
+                              session.sessionId,
+                              session,
+                              "minute",
+                              event.target.value
+                            )
+                          }
+                        />
+                      </TimeRangeForm.TimeGroup>
+                    </TimeRangeForm.Field>
+                  </div>
+                </SessionContent>
+                <ActivityContent>
+                  <SessionTitle>활동 내용</SessionTitle>
+                  <SubTitle>날짜별 활동 내용을 간단히 적어주세요</SubTitle>
+                  <TextArea.Root>
+                    <TextArea.Input
+                      minLength={ACTIVITY_CONTENT_MIN_LENGTH}
+                      maxLength={ACTIVITY_CONTENT_MAX_LENGTH}
+                      value={session.activityContent}
+                      placeholder="활동 내용을 간단히 입력해주세요"
+                      onChange={(value: string) =>
+                        handleActivityContentChange(session.sessionId, value)
+                      }
+                    />
+                    <TextArea.Footer>
+                      {session.activityContent.length > 0 &&
+                        session.activityContent.length <
+                          ACTIVITY_CONTENT_MIN_LENGTH && (
+                          <TextArea.Error
+                            minLength={ACTIVITY_CONTENT_MIN_LENGTH}
+                          />
+                        )}
+                    </TextArea.Footer>
+                  </TextArea.Root>
+                </ActivityContent>
+              </SessionInfoContainer>
+            );
+          })}
         </div>
       </SectionCard>
       <AddSessionButton onClick={() => handleAddSession()}>
@@ -283,3 +332,9 @@ const DatePickerButton = twc.button`
 `;
 
 const DatePickerWrapper = twc.div`relative flex-1`;
+
+const CalendarPopover = twc.div`
+  absolute left-0 top-[calc(100%+8px)] z-10 w-full
+  rounded-[12px] border border-[#E5E5E5] bg-white p-[12px]
+  shadow-[0px_12px_32px_rgba(0,0,0,0.08)]
+`;
