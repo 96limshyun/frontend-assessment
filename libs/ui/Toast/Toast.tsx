@@ -23,7 +23,7 @@ export default function Toast({
   }, [duration, onClose]);
 
   return (
-    <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[9999] h-[48px] w-[328px] md:w-[528px]">
+    <div className="fixed bottom-20 md:bottom-8 left-1/2 -translate-x-1/2 z-9999 h-[48px] w-[328px] md:w-[528px]">
       <div
         className={twx(
           "rounded-[8px] bg-[#121212] px-6 py-4",
