@@ -1,5 +1,5 @@
 import { overlay } from "overlay-kit";
-import { Toast } from "@/libs/design-system/Toast";
+import { Toast } from "@/libs/ui/Toast";
 
 export const showToast = (message: string, duration = 2000) => {
   return new Promise<void>((resolve) => {

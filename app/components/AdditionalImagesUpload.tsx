@@ -6,7 +6,7 @@ import {
   SectionCard,
   ImageUploadCard,
   EmptyAdditionalImageView,
-} from "@/libs/design-system";
+} from "@/libs/ui";
 
 import { MAX_ADDITIONAL_IMAGES } from "@/app/constants";
 

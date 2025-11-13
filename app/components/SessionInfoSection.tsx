@@ -1,4 +1,4 @@
-import { SectionCard } from "@/libs/design-system";
+import { SectionCard } from "@/libs/ui";
 import {
   ACTIVITY_CONTENT_MIN_LENGTH,
   ACTIVITY_CONTENT_MAX_LENGTH,

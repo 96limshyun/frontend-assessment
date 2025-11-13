@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { SectionCard, TextArea } from "@/libs/design-system";
+import { SectionCard, TextArea } from "@/libs/ui";
 
 import {
   CONTENT_TITLE_MIN_LENGTH,

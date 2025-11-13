@@ -1,4 +1,4 @@
-import { DatePicker } from "@/libs/design-system";
+import { DatePicker } from "@/libs/ui";
 
 import { DatePickerField } from "@/app/components/SessionInfoSection/styles";
 

@@ -5,7 +5,7 @@ import {
   BottomSheet,
   SelectTrigger,
   OptionButton,
-} from "@/libs/design-system";
+} from "@/libs/ui";
 import { splitTextIntoParagraphs, showToast } from "@/libs/utils";
 import { CATEGORIES, MAX_SELECTED_CATEGORIES } from "@/app/constants";
 

@@ -1,6 +1,6 @@
 import { ChangeEvent } from "react";
 
-import { TimeRangeForm } from "@/libs/design-system";
+import { TimeRangeForm } from "@/libs/ui";
 import type { TimeInfo } from "@/libs/types/sectionInfo";
 
 export type TimeFieldKey = Extract<keyof TimeInfo, "hour" | "minute">;

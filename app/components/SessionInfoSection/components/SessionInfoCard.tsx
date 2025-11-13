@@ -15,7 +15,7 @@ import SessionTimeField, { TimeFieldKey } from "./SessionTimeField";
 import type { SessionInfo } from "@/libs/types/sectionInfo";
 import { overlay } from "overlay-kit";
 import { splitTextIntoParagraphs } from "@/libs/utils";
-import Dialog from "@/libs/design-system/Dialog";
+import Dialog from "@/libs/ui/Dialog";
 interface SessionInfoCardProps {
   session: SessionInfo;
   index: number;

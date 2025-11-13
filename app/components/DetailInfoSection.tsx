@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { SectionCard } from "@/libs/design-system";
+import { SectionCard } from "@/libs/ui";
 
 export default function DetailInfoSection() {
   const [location, setLocation] = useState("");

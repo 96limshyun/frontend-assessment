@@ -1,4 +1,4 @@
-import { TextArea } from "@/libs/design-system";
+import { TextArea } from "@/libs/ui";
 
 interface SessionActivityFieldProps {
   value: string;

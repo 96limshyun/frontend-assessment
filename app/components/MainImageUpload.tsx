@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { ImageUploadCard, SectionCard } from "@/libs/design-system";
+import { ImageUploadCard, SectionCard } from "@/libs/ui";
 
 export default function MainImageUpload() {
   const [file, setFile] = useState<File | null>(null);

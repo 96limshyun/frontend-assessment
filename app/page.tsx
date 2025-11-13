@@ -1,6 +1,6 @@
 "use client";
 
-import { Header, SectionLayout, NextButton } from "@/libs/design-system";
+import { Header, SectionLayout, NextButton } from "@/libs/ui";
 import {
   AdditionalImagesUpload,
   MainImageUpload,

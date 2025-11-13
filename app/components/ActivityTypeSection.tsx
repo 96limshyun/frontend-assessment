@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { SectionCard, ToggleButton } from "@/libs/design-system";
+import { SectionCard, ToggleButton } from "@/libs/ui";
 
 type ActivityType = "online" | "offline";
 
