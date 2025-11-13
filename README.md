@@ -53,8 +53,6 @@ libs/
 - `libs/utils`: 회차 시간 계산, 토스트 호출, 텍스트 분리 같은 헬퍼 함수.
 - `libs/types`: `ProgramFormState`, `SessionInfo` 등의 타입 선언.
 
-## 과제 구현 시 고려사항
-
 ## 과제 요구사항 체크리스트
 
 - [x] 대표 이미지 1장 업로드 컴포넌트
