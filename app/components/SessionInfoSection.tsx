@@ -5,7 +5,7 @@ import {
 } from "@/app/constants";
 import { useSessionInfo } from "@/app/hooks/useSessionInfo";
 import { useSessionDateLimits } from "@/app/hooks/useSessionDateLimits";
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import { normalizeDate } from "@/libs/utils/sessionTime";
 import {
   SessionInfoCard,
@@ -16,16 +16,17 @@ import {
   SessionsWrapper,
 } from "@/app/components/SessionInfoSection/styles";
 import { SessionInfo } from "@/libs/types/sectionInfo";
-import { useEffect } from "react";
 import type { FieldError } from "react-hook-form";
 
 interface SessionInfoSectionProps {
   onChange: (sessionInfo: SessionInfo[]) => void;
+  onActivityContentChange?: (sessionInfo: SessionInfo[]) => void;
   sessionInfoContentError?: unknown;
 }
 
 export default function SessionInfoSection({
   onChange,
+  onActivityContentChange,
   sessionInfoContentError,
 }: SessionInfoSectionProps) {
   const {
@@ -48,12 +49,26 @@ export default function SessionInfoSection({
   const today = useMemo(() => normalizeDate(new Date()), []);
   const sessionDateLimits = useSessionDateLimits(sessionInfo, today);
 
+  const activityContents = useMemo(
+    () => sessionInfo.map((s) => s.activityContent).join(","),
+    [sessionInfo]
+  );
+
   useEffect(() => {
     onChange(sessionInfo);
     // programSessionInfo/onChange을 의존성에 포함하면 상위 상태 갱신 → 하위 효과 재실행 루프가 발생하므로
     // sessionInfo만 추적하고 ESLint 규칙은 예외 처리한다.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionInfo]);
+
+  // activityContent 변경 시에만 검증 실행
+  useEffect(() => {
+    if (onActivityContentChange) {
+      onActivityContentChange(sessionInfo);
+    }
+    // activityContents만 추적하여 activityContent 변경 시에만 실행
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activityContents]);
 
   return (
     <>

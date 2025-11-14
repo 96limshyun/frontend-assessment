@@ -23,6 +23,8 @@ import {
 } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ProgramFormStateSchema, ActivityType } from "@/libs/types/programForm";
+import { showToast, splitTextIntoParagraphs } from "@/libs/utils";
+import type { FieldErrors } from "react-hook-form";
 
 interface UseProgramFormReturn {
   register: UseFormRegister<ProgramFormState>;
@@ -42,6 +44,9 @@ interface UseProgramFormReturn {
   handleContentTitleChange: (contentTitle: string) => void;
   handleActivityTypeChange: (activityType: ActivityType) => void;
   handleSessionInfoChange: (sessionInfo: SessionInfo[]) => void;
+  handleActivityContentChange: (sessionInfo: SessionInfo[]) => void;
+  onSubmit: () => void;
+  onError: (errors: FieldErrors<ProgramFormState>) => void;
 }
 
 export const useProgramForm = (
@@ -96,7 +101,10 @@ export const useProgramForm = (
 
   const handleContentTitleChange = useCallback(
     (contentTitle: string) => {
-      setValue("contentTitle", contentTitle);
+      setValue("contentTitle", contentTitle, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
     },
     [setValue]
   );
@@ -114,6 +122,41 @@ export const useProgramForm = (
     },
     [setValue]
   );
+
+  const handleActivityContentChange = useCallback(
+    (sessionInfo: SessionInfo[]) => {
+      setValue("sessionInfo", sessionInfo, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    },
+    [setValue]
+  );
+
+  const onSubmit = () => {
+    showToast("콘텐츠가 등록되었어요");
+  };
+
+  const onError = (errors: FieldErrors<ProgramFormState>) => {
+    const messages = [
+      errors.contentTitle?.message,
+      ...(Array.isArray(errors.sessionInfo)
+        ? errors.sessionInfo
+            .map(
+              (activity, index) =>
+                activity?.activityContent?.message &&
+                `${index + 1}. ${activity.activityContent.message}`
+            )
+            .filter(Boolean)
+        : []),
+    ].filter((m): m is string => !!m);
+
+    if (messages.length > 0) {
+      showToast(splitTextIntoParagraphs(messages.join("\n"), "\n"));
+    } else {
+      showToast("입력 정보를 확인해주세요.");
+    }
+  };
 
   return {
     register,
@@ -133,5 +176,8 @@ export const useProgramForm = (
     handleContentTitleChange,
     handleActivityTypeChange,
     handleSessionInfoChange,
+    handleActivityContentChange,
+    onSubmit,
+    onError,
   };
 };
