@@ -6,6 +6,7 @@ import {
   ACTIVITY_CONTENT_MAX_LENGTH,
 } from "@/app/constants";
 
+export type TimeInfo = z.infer<typeof TimeInfoSchema>;
 export const TimeInfoSchema = z.object({
   period: z.enum(["오전", "오후"]),
   hour: z.string(),
