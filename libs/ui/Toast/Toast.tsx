@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, type ReactNode } from "react";
 import { twx } from "@/libs/utils";
 
 interface ToastProps {
-  message: string;
+  message: ReactNode;
   duration?: number;
   onClose: () => void;
 }
@@ -23,12 +23,12 @@ export default function Toast({
   }, [duration, onClose]);
 
   return (
-    <div className="fixed bottom-20 md:bottom-8 left-1/2 -translate-x-1/2 z-9999 h-[48px] w-[328px] md:w-[528px]">
+    <div className="fixed bottom-20 md:bottom-8 left-1/2 -translate-x-1/2 z-9999 min-h-[48px] w-[328px] md:w-[528px]">
       <div
         className={twx(
           "rounded-[8px] bg-[#121212] px-6 py-4",
           "text-white text-base font-medium",
-          "shadow-lg text-center h-full flex items-center justify-center"
+          "shadow-lg text-center min-h-full flex flex-col items-center justify-center gap-1"
         )}
       >
         {message}
