@@ -10,7 +10,6 @@ import {
   SessionInfoSection,
 } from "@/app/components";
 import { useProgramForm } from "@/app/hooks/useProgramForm";
-import type { ProgramFormState } from "@/libs/types/programForm";
 
 export default function Home() {
   const {
@@ -20,30 +19,22 @@ export default function Home() {
     categoriesOpen,
     setCategoriesOpen,
     isCategoriesSelected,
-    handleNextClick,
     handleMainImageChange,
     handleAdditionalImagesChange,
     handleCategoriesChange,
     handleContentTitleChange,
     handleActivityTypeChange,
     handleSessionInfoChange,
+    handleActivityContentChange,
+    onSubmit,
+    onError,
   } = useProgramForm();
-
-  const onSubmit = (data: ProgramFormState) => {
-    console.log("Form submitted:", data);
-    // 여기에 폼 제출 로직 추가
-  };
-
-  const onError = (errors: unknown) => {
-    console.log("Form errors:", errors);
-    // 에러 처리 로직 추가
-  };
 
   return (
     <>
       <Header
         selectedCategories={programFormState.categories}
-        onClick={handleNextClick}
+        onClick={handleSubmit(onSubmit, onError)}
       />
       <SectionLayout
         leftTop={
@@ -77,6 +68,7 @@ export default function Home() {
             />
             <SessionInfoSection
               onChange={handleSessionInfoChange}
+              onActivityContentChange={handleActivityContentChange}
               sessionInfoContentError={formState.errors.sessionInfo}
             />
           </div>
