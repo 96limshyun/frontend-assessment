@@ -1,6 +1,7 @@
 "use client";
 
 import { SectionCard, TextArea } from "@/libs/ui";
+import type { FieldError } from "react-hook-form";
 
 import {
   CONTENT_TITLE_MIN_LENGTH,
@@ -10,10 +11,12 @@ import {
 interface ContentTitleSectionProps {
   contentTitle: string;
   onChange: (contentTitle: string) => void;
+  contentError?: FieldError;
 }
 export default function ContentTitleSection({
   contentTitle,
   onChange,
+  contentError,
 }: ContentTitleSectionProps) {
   return (
     <SectionCard title="콘텐츠 제목">
@@ -28,8 +31,8 @@ export default function ContentTitleSection({
           counterLabel="최소 8자"
         />
         <TextArea.Footer>
-          {contentTitle.length > 0 && contentTitle.length < CONTENT_TITLE_MIN_LENGTH && (
-            <TextArea.Error minLength={CONTENT_TITLE_MIN_LENGTH} />
+          {contentError && (
+            <TextArea.Error>{contentError.message}</TextArea.Error>
           )}
         </TextArea.Footer>
       </TextArea.Root>

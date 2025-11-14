@@ -17,12 +17,16 @@ import {
 } from "@/app/components/SessionInfoSection/styles";
 import { SessionInfo } from "@/libs/types/sectionInfo";
 import { useEffect } from "react";
+import type { FieldError } from "react-hook-form";
+
 interface SessionInfoSectionProps {
   onChange: (sessionInfo: SessionInfo[]) => void;
+  sessionInfoContentError?: unknown;
 }
 
 export default function SessionInfoSection({
   onChange,
+  sessionInfoContentError,
 }: SessionInfoSectionProps) {
   const {
     sessionInfo,
@@ -109,6 +113,18 @@ export default function SessionInfoSection({
                 onCompleteSessionDate={handleCompleteSessionDate}
                 activityMinLength={ACTIVITY_CONTENT_MIN_LENGTH}
                 activityMaxLength={ACTIVITY_CONTENT_MAX_LENGTH}
+                activityContentError={
+                  Array.isArray(sessionInfoContentError) &&
+                  sessionInfoContentError[index] &&
+                  typeof sessionInfoContentError[index] === "object" &&
+                  "activityContent" in sessionInfoContentError[index]
+                    ? (
+                        sessionInfoContentError[index] as {
+                          activityContent?: FieldError;
+                        }
+                      ).activityContent
+                    : undefined
+                }
               />
             );
           })}

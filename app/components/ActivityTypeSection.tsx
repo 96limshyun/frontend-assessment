@@ -1,11 +1,10 @@
 "use client";
 
 import { SectionCard, ToggleButton } from "@/libs/ui";
-import type { ActivityType } from "@/libs/types/programForm";
-
+import { ActivityType } from "@/libs/types/programForm";
 interface ActivityTypeSectionProps {
   activityType: ActivityType | null;
-  onChange: (type: ActivityType) => void;
+  onChange: (activityType: ActivityType) => void;
 }
 
 export default function ActivityTypeSection({
@@ -19,14 +18,14 @@ export default function ActivityTypeSection({
     >
       <div className="flex gap-[8px]">
         <ToggleButton
-          isSelected={activityType === "online"}
-          onClick={() => onChange("online")}
+          isSelected={activityType === ActivityType.ONLINE}
+          onClick={() => onChange(ActivityType.ONLINE)}
         >
           온라인
         </ToggleButton>
         <ToggleButton
-          isSelected={activityType === "offline"}
-          onClick={() => onChange("offline")}
+          isSelected={activityType === ActivityType.OFFLINE}
+          onClick={() => onChange(ActivityType.OFFLINE)}
         >
           직접 만나기
         </ToggleButton>

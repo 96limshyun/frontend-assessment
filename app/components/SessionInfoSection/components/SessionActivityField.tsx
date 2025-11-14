@@ -1,10 +1,11 @@
 import { TextArea } from "@/libs/ui";
-
+import type { FieldError } from "react-hook-form";
 interface SessionActivityFieldProps {
   value: string;
   minLength: number;
   maxLength: number;
   onChange: (value: string) => void;
+  activityContentError?: FieldError;
 }
 
 const SessionActivityField = ({
@@ -12,6 +13,7 @@ const SessionActivityField = ({
   minLength,
   maxLength,
   onChange,
+  activityContentError,
 }: SessionActivityFieldProps) => {
   return (
     <TextArea.Root>
@@ -23,8 +25,8 @@ const SessionActivityField = ({
         onChange={onChange}
       />
       <TextArea.Footer>
-        {value.length > 0 && value.length < minLength && (
-          <TextArea.Error minLength={minLength} />
+        {activityContentError && (
+          <TextArea.Error>{activityContentError.message}</TextArea.Error>
         )}
       </TextArea.Footer>
     </TextArea.Root>

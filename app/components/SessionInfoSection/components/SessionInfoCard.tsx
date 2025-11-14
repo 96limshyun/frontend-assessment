@@ -16,6 +16,7 @@ import type { SessionInfo } from "@/libs/types/sectionInfo";
 import { overlay } from "overlay-kit";
 import { splitTextIntoParagraphs } from "@/libs/utils";
 import Dialog from "@/libs/ui/Dialog";
+import type { FieldError } from "react-hook-form";
 interface SessionInfoCardProps {
   session: SessionInfo;
   index: number;
@@ -37,6 +38,7 @@ interface SessionInfoCardProps {
   onCompleteSessionDate: () => void;
   activityMinLength: number;
   activityMaxLength: number;
+  activityContentError?: FieldError;
 }
 
 const SessionInfoCard = ({
@@ -60,6 +62,7 @@ const SessionInfoCard = ({
   onCompleteSessionDate,
   activityMinLength,
   activityMaxLength,
+  activityContentError,
 }: SessionInfoCardProps) => {
   const title = totalSessions === 1 ? "회차 정보" : `${index + 1}회차 정보`;
 
@@ -125,6 +128,7 @@ const SessionInfoCard = ({
           minLength={activityMinLength}
           maxLength={activityMaxLength}
           onChange={onActivityContentChange}
+          activityContentError={activityContentError}
         />
       </ActivityContent>
     </SessionInfoContainer>
