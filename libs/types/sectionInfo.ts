@@ -19,10 +19,14 @@ export const SessionInfoSchema = z.object({
   sessionTimeEnd: TimeInfoSchema,
   activityContent: z
     .string()
-    .min(ACTIVITY_CONTENT_MIN_LENGTH)
-    .max(ACTIVITY_CONTENT_MAX_LENGTH)
+    .min(ACTIVITY_CONTENT_MIN_LENGTH, {
+      message: `활동 내용은 ${ACTIVITY_CONTENT_MIN_LENGTH}자 이상 입력해주세요.`,
+    })
+    .max(ACTIVITY_CONTENT_MAX_LENGTH, {
+      message: `활동 내용은 ${ACTIVITY_CONTENT_MAX_LENGTH}자 이하로 입력해주세요.`,
+    })
     .refine((value) => value.trim() !== "", {
-      message: `${ACTIVITY_CONTENT_MIN_LENGTH}자 이상 입력해주세요.`,
+      message: `활동 내용을 입력해주세요.`,
     }),
 });
 
