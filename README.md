@@ -1,6 +1,6 @@
 ## 프로젝트 개요
 
-Next.js 16 기반의 `frontend-assessment`는 프로그램(클래스/콘텐츠) 등록 흐름을 설계하는 과제를 위해 만들어진 싱글 페이지 애플리케이션입니다. 메인 화면에서 대표 이미지와 추가 이미지 업로드, 카테고리 선택, 콘텐츠 제목 입력, 활동 방식(온라인/오프라인) 설정, 회차별 상세 정보 입력을 순차적으로 진행할 수 있도록 UI와 상태 관리 로직이 구성돼 있습니다.
+Next.js 16 기반의 `frontend-assessment`는 프로그램(클래스/콘텐츠) 등록 흐름을 설계하는 과제를 위해 만들어진 싱글 페이지 애플리케이션입니다. 메인 화면에서 대표 이미지와 추가 이미지 업로드, 카테고리 선택, 콘텐츠 제목 입력, 활동 방식(온라인/오프라인) 설정, 회차별 상세 정보 입력을 순차적으로 진행할 수 있도록 UI와 상태 관리 로직이 구성돼 있습니다. react-hook-form과 zod를 활용하여 타입 안전한 폼 검증과 실시간 에러 피드백을 제공합니다.
 
 본 문서는 과제 평가자가 프로젝트 구조와 핵심 구현 포인트를 빠르게 이해하고, 실행/확장에 필요한 정보를 제공하기 위해 작성되었습니다.
 
@@ -9,6 +9,7 @@ Next.js 16 기반의 `frontend-assessment`는 프로그램(클래스/콘텐츠) 
 - Next.js 16(App Router) & React 19
 - TypeScript 5
 - Tailwind CSS 4(alpha) with `react-twc` + `tailwind-merge`
+- 폼 관리: `react-hook-form` + `zod`를 통한 타입 안전 폼 검증
 - 상태 관리: React hooks(`useState`, `useMemo`, `useCallback`) 기반 로컬 상태
 - UI 유틸: `overlay-kit`를 이용한 토스트, `vaul` 기반 Bottom Sheet
 - 기타: `uuid`(session id 생성), `class-variance-authority`와 `clsx`(스타일 분기)
@@ -42,16 +43,16 @@ libs/
 
 ### `app/` 도메인 로직
 
-- `page.tsx`: 폼 상태를 조합해 화면을 렌더링하는 엔트리.
-- `components/`: 이미지 업로드, 카테고리, 제목, 활동 방식, 회차 입력 등 주요 폼 섹션.
-- `hooks/`: `useProgramForm`, `useSessionInfo`, `useSessionDateLimits`로 폼 상태와 날짜/시간 규칙 처리.
+- `page.tsx`: 폼 상태를 조합해 화면을 렌더링하는 엔트리. react-hook-form의 `handleSubmit`으로 폼 제출 처리.
+- `components/`: 이미지 업로드, 카테고리, 제목, 활동 방식, 회차 입력 등 주요 폼 섹션. 실시간 검증 에러 표시 지원.
+- `hooks/`: `useProgramForm`(react-hook-form + zod 통합), `useSessionInfo`, `useSessionDateLimits`로 폼 상태와 날짜/시간 규칙 처리.
 - `constants/index.ts`: 길이·개수 제한과 초기 상태 정의.
 
 ### `libs/` 재사용 레이어
 
 - `libs/ui`: 헤더, 섹션 카드, 업로드 카드, 토글, 바텀시트, 캘린더, 토스트 등 공통 컴포넌트.
 - `libs/utils`: 회차 시간 계산, 토스트 호출, 텍스트 분리 같은 헬퍼 함수.
-- `libs/types`: `ProgramFormState`, `SessionInfo` 등의 타입 선언.
+- `libs/types`: `ProgramFormState`, `SessionInfo` 등의 타입 선언 및 zod 스키마 정의.
 
 ## 과제 요구사항 체크리스트
 
@@ -65,3 +66,6 @@ libs/
 - [x] 시간 입력 자동 보정(시작/종료)과 검증
 - [x] 회차 활동 내용 최소/최대 길이 설정
 - [x] 모바일 하단 고정 Next 버튼(카테고리 선택 시 활성화)
+- [x] react-hook-form + zod를 통한 타입 안전 폼 검증
+- [x] 콘텐츠 제목 및 활동 내용 실시간 검증 및 에러 메시지 표시
+- [x] 폼 제출 시 검증 에러를 Toast로 표시
